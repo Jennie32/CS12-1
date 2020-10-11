@@ -38,7 +38,7 @@ export default function LoginForm() {
           />
         </div>
         <div className="form-field">
-          <label htmlFor="amount">amount: </label>
+          <label htmlFor="amount">Amount: </label>
           <input
             type="number"
             id="amount"
