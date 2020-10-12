@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #708090;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -31,7 +31,10 @@
 .form-field {
   display: flex;
   justify-content: space-between;
+  margin:50px;
+
 }
+
 
 @keyframes App-logo-spin {
   from {
