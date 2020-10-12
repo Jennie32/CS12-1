@@ -15,7 +15,6 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-
 const useStyles = makeStyles((theme) => ({
   title:{
     marginTop: 300,
@@ -102,7 +101,7 @@ export default function LoginForm() {
     const [name, setName] = React.useState("");
     const [amount, setAmount] = React.useState("");
     const classes = useStyles();  
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
       event.preventDefault();
       const data = {
         "id": "573cf6e7-8caf-46f2-9805-bab6771066f2",
@@ -117,14 +116,12 @@ export default function LoginForm() {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
       };
-      axios.post('https://b8l77g698i.execute-api.eu-central-1.amazonaws.com/Stage/execution', { data }, headers)
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      })
+      let result = await axios.post('https://b8l77g698i.execute-api.eu-central-1.amazonaws.com/Stage/execution', { data }, headers);
+      console.log(result.data);
+      alert('Payment claim has been submitted!');
     }
     return (
-      <form onSubmit={handleSubmit} className={classes.title}>   
+      <form onSubmit={handleSubmit} className={classes.title}> 
       <Typography component="h1" variant="h2" >
           Workflow System
         </Typography>
@@ -211,7 +208,7 @@ export default function LoginForm() {
 
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-     <div classname = "rem_sub">     
+     <div className = "rem_sub">     
         <form className={classes.form} noValidate>        
           <FormControlLabel
             control={<Checkbox value="remember" color="primary"/>}
