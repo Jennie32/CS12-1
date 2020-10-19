@@ -1,15 +1,16 @@
 import React from 'react';
 import './App.css';
-import ClaimForm from './components/ClaimForm.jsx'
+import ClaimForm from './components/ClaimForm'
+import ExecutionList from "./components/ExecutionList"
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        
-      <ClaimForm />
-      </header>
-      
+      <Router>
+        <Route exact path='/' component={ClaimForm} />
+        <Route path='/execution-list' component={ExecutionList} />
+      </Router>      
     </div>
   );
 }
