@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
 const sections = [
   { title: " Payment Claim", url: "/" },
   { title: "Executions", url: "/execution-list" },
-  { title: "To develop...", url: "#" },
-  { title: "To develop...", url: "#" },
-  { title: "To develop...", url: "#" },
+  { title: "Under construction", url: "#" },
+  { title: "Under construction", url: "#" },
+  { title: "Under construction", url: "#" },
 ];
 
 export default function NavMenu() {
@@ -50,6 +50,7 @@ export default function NavMenu() {
             variant="body2"
             href={section.url}
             className={classes.toolbarLink}
+            style={{textDecoration:'none'}}
           >
             {section.title}
           </Link>
