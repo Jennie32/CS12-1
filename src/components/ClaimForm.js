@@ -18,7 +18,7 @@ import { Layout } from "./Layout";
 
 const useStyles = makeStyles((theme) => ({
     title: {
-        marginTop: 300,
+        marginTop: 30,
     },
     "@global": {
         ul: {
@@ -80,19 +80,7 @@ const tiers = [{
         description: ["Workflow3"],
         buttonText: "Start",
         buttonVariant: "outlined",
-    },
-    {
-        title: "Workflow 4",
-        description: ["Workflow4"],
-        buttonText: "Start",
-        buttonVariant: "outlined",
-    },
-    {
-        title: "Workflow 5",
-        description: ["Workflow5"],
-        buttonText: "Start",
-        buttonVariant: "outlined",
-    },
+    }
 ];
 
 export default function LoginForm() {
@@ -179,59 +167,7 @@ export default function LoginForm() {
         /div> <
         /Container>
 
-        <
-        Container maxWidth = "md"
-        component = "main"
-        className = { classes.step } >
-        <
-        Grid container spacing = { 5 }
-        alignItems = "flex-end" > {
-            tiers.map((tier) => (
-                // Enterprise card is full width at sm breakpoint
-                <
-                Grid item key = { tier.title }
-                xs = { 12 }
-                sm = { tier.title === "Enterprise" ? 12 : 6 }
-                md = { 4 } >
-                <
-                Card className = { classes.card } >
-                <
-                CardHeader title = { tier.title }
-                subheader = { tier.subheader }
-                titleTypographyProps = {
-                    { align: "center" } }
-                subheaderTypographyProps = {
-                    { align: "center" } }
-                action = { tier.title === "Pro" ? < StarIcon / > : null }
-                className = { classes.cardHeader }
-                /> <
-                CardContent className = { classes.cardContent } >
-                <
-                ul > {
-                    tier.description.map((line) => ( <
-                        Typography component = "li"
-                        variant = "subtitle1"
-                        align = "center"
-                        key = { line } >
-                        { line } <
-                        /Typography>
-                    ))
-                } <
-                /ul> <
-                /CardContent> <
-                CardActions >
-                <
-                Button fullWidth variant = { tier.buttonVariant }
-                color = "primary" >
-                { tier.buttonText } <
-                /Button> <
-                /CardActions> <
-                /Card> <
-                /Grid>
-            ))
-        } <
-        /Grid> <
-        /Container>
+        
 
         <
         Container component = "main"
@@ -243,11 +179,7 @@ export default function LoginForm() {
         <
         form className = { classes.form }
         noValidate >
-        <
-        FormControlLabel control = { < Checkbox value = "remember"
-            color = "primary" / > }
-        label = "Remember me" /
-        >
+        
         <
         Button type = "submit"
         fullWidth variant = "contained"

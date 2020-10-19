@@ -36,6 +36,7 @@ export default function NavMenu() {
   const classes = useStyles();
 
   return (
+
     <React.Fragment>
       <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
         {sections.map((section) => (
@@ -54,5 +55,7 @@ export default function NavMenu() {
       
       
     </React.Fragment>
+
+   
   );
 }
