@@ -1,9 +1,13 @@
 import React, { Component, useState, useEffect } from "react";
 import axios from "axios";
 import { Layout } from "./Layout";
+import Button from "@material-ui/core/Button";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
+  const [loading, setloading] = useState(true);
+
   async function getTitle(item) {
     if (item.hasOwnProperty("data")) {
       if (item.data.hasOwnProperty("claim_title")) {
@@ -15,8 +19,13 @@ export default function ExecutionList() {
   useEffect(() => {
     (async () => {
       await fetchExecutions();
+      setloading(false);
     })();
   }, []);
+
+  const viewDetail = (event) => {
+    alert("clicked!");
+  };
 
   const fetchExecutions = async (event) => {
     const headers = {
@@ -59,16 +68,37 @@ export default function ExecutionList() {
     setexecutionList(executions);
   };
   return (
-    <div>
+    <>
       <Layout>
-        <ul>
-          {executionList.map((item, index) => (
-            <li key={index}>
-              Claim Title: {item[0]} Claim Status: {item[1]}
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <ClipLoader size={150} color={"#123abc"} loading={loading} />
+        ) : (
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {executionList.map((item, index) => (
+                <tr key={index}>
+                  <td>{item[0]}</td>
+                  <td>{item[1]}</td>
+                  <td>
+                    <div className="btn-container">
+                      <Button variant="primary" onClick={() => viewDetail()}>
+                        View
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </Layout>
-    </div>
+    </>
   );
 }
