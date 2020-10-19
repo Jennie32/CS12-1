@@ -13,13 +13,9 @@ const NavMenu = () => {
           <NavbarBrand tag={Link} to="/">
             Payment claim
           </NavbarBrand>
-          <ul className="navbar-nav flex-grow">
-            <NavItem>
-              <NavLink tag={Link} className="text-dark" to="/execution-list">
-                Executions
-              </NavLink>
-            </NavItem>
-          </ul>
+          <NavbarBrand tag={Link} to="/execution-list">
+            Executions
+          </NavbarBrand>
         </Container>
       </Navbar>
     </header>
