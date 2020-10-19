@@ -1,20 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import StarIcon from "@material-ui/icons/StarBorder";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import { Layout } from "./Layout";
+import { Alert } from "reactstrap";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -87,10 +80,15 @@ const tiers = [
 ];
 
 export default function LoginForm() {
-  const [name, setName] = React.useState("");
-  const [amount, setAmount] = React.useState("");
-  const [title, setTitle] = React.useState("");
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [title, setTitle] = useState("");
+  const [visible, setVisible] = useState(false);
+
   const classes = useStyles();
+
+  const onDismiss = () => setVisible(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
@@ -106,17 +104,23 @@ export default function LoginForm() {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     };
-    let result = await axios.post(
+    await axios.post(
       "https://b8l77g698i.execute-api.eu-central-1.amazonaws.com/Stage/execution",
       { data },
       headers
     );
-    console.log(result.data);
-    alert("Payment claim has been submitted!");
+    setVisible(true);
+    setName("");
+    setAmount("");
+    setTitle("");
   };
+
   return (
     <div>
       <Layout>
+        <Alert color="info" isOpen={visible} toggle={onDismiss}>
+          Payment claim has been submitted!
+        </Alert>
         <form onSubmit={handleSubmit} className={classes.title}>
           <Typography component="h1" variant="h2">
             Workflow System{" "}
@@ -127,61 +131,57 @@ export default function LoginForm() {
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-              <form className={classes.form} noValidate>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="Name"
-                  name="name"
-                  autoFocus
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />{" "}
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="amount"
-                  label="Amount"
-                  type="number"
-                  id="amount"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />{" "}
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="claim title"
-                  label="Claim Title"
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  id="claimTitle"
-                />
-              </form>{" "}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Name"
+                name="name"
+                autoFocus
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />{" "}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="amount"
+                label="Amount"
+                type="number"
+                id="amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />{" "}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="claim title"
+                label="Claim Title"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                id="claimTitle"
+              />
             </div>{" "}
           </Container>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className="rem_sub">
-              <form className={classes.form} noValidate>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Submit{" "}
-                </Button>{" "}
-              </form>{" "}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Submit{" "}
+              </Button>{" "}
             </div>{" "}
           </Container>{" "}
         </form>{" "}
