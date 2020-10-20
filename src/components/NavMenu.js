@@ -4,8 +4,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Toolbar from "@material-ui/core/Toolbar";
-import Link from "@material-ui/core/Link";
-
+import { NavLink } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -43,17 +42,16 @@ export default function NavMenu() {
         className={classes.toolbarSecondary}
       >
         {sections.map((section, index) => (
-          <Link
+          <NavLink
             color="inherit"
             noWrap
             key={index}
-            variant="body2"
-            href={section.url}
+            to={section.url}
             className={classes.toolbarLink}
-            style={{textDecoration:'none'}}
+            style={{ textDecoration: "none" }}
           >
             {section.title}
-          </Link>
+          </NavLink>
         ))}
       </Toolbar>
     </React.Fragment>
