@@ -35,6 +35,7 @@ export default function ExecutionList() {
       var executionArns = result.data.executions.map(
         (execution) => execution.executionArn
       );
+
       const asyncDescriptions = await Promise.all(
         executionArns.map(async (arn) => {
           return await axios.post(
@@ -52,8 +53,28 @@ export default function ExecutionList() {
       var status = await Promise.all(
         asyncDescriptions.map((description) => description.data.status)
       );
+
+      const events = (await Promise.all(
+        executionArns.map(async (arn) => {
+          return await axios.post(
+            "https://prf7e0psi7.execute-api.eu-central-1.amazonaws.com/beta/execution",
+            { executionArn: arn.toString(),includeExecutionData: true, maxResults: 10, reverseOrder: true },
+            headers
+          );
+        })
+      )).map(res => res.data.events);
+
+      const names = events.map(events => {
+        for (const event of events) {
+          if ("stateEnteredEventDetails" in event && 'name' in event.stateEnteredEventDetails) {
+            return event.stateEnteredEventDetails.name;
+          }
+        }
+        return 'not found';
+      })
+
       var executions = titles.map(function (e, i) {
-        return [e, status[i]];
+        return [e, status[i], names[i]];
       });
       setexecutionList(executions);
     };
@@ -78,6 +99,7 @@ export default function ExecutionList() {
               <tr>
                 <th>Title</th>
                 <th>Status</th>
+                <th>States</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -86,6 +108,7 @@ export default function ExecutionList() {
                 <tr key={index}>
                   <td>{item[0]}</td>
                   <td>{item[1]}</td>
+                  <td>{item[2]}</td>
                   <td>
                     <div className="btn-container">
                       <Button variant="text" onClick={() => viewDetail()}>
