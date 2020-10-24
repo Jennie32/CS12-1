@@ -13,7 +13,7 @@ export default function ExecutionList() {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
-  var descriptions, executionArns;
+  var details, executionArns;
 
   async function getTitle(item) {
     if (item.hasOwnProperty("data")) {
@@ -52,7 +52,7 @@ export default function ExecutionList() {
     return "not found";
   }
 
-  async function getDescriptions() {
+  async function getDetails() {
     const asyncDescriptions = await Promise.all(
       executionArns.map(async (arn) => {
         const tempDescription = await axios.post(
@@ -80,6 +80,7 @@ export default function ExecutionList() {
           await getTitle(JSON.parse(tempDescription.data.input)),
           tempDescription.data.status,
           name,
+          arn.toString(),
         ];
       })
     );
@@ -87,13 +88,13 @@ export default function ExecutionList() {
   }
 
   useEffect(() => {
-    const fetchExecutions = async (event) => {
+    const fetchExecutions = async () => {
       executionArns = await getARNs();
-      descriptions = await getDescriptions();
-      var executions = descriptions.map(function (description, i) {
-        let title, status, state;
-        [title, status, state] = description;
-        return [title, status, state];
+      details = await getDetails();
+      let executions = details.map((detail) => {
+        let title, status, state, arn;
+        [title, status, state, arn] = detail;
+        return [title, status, state, arn];
       });
       setexecutionList(executions);
     };
@@ -103,10 +104,8 @@ export default function ExecutionList() {
     })();
   }, []);
 
-  const viewDetail = (event) => {
-    history.push(
-      "/execution-detail/arn:aws:states:eu-central-1:638900115631:execution:BasicWorkflow:ecaa9bcc-bbf9-4425-897d-a24312712b35"
-    );
+  const viewDetail = (arn) => {
+    history.push("/execution-detail/" + arn);
   };
 
   return (
@@ -132,7 +131,10 @@ export default function ExecutionList() {
                   <td>{item[2]}</td>
                   <td>
                     <div className="btn-container">
-                      <Button variant="text" onClick={() => viewDetail()}>
+                      <Button
+                        variant="text"
+                        onClick={() => viewDetail(item[3])}
+                      >
                         View
                       </Button>
                     </div>
