@@ -44,7 +44,6 @@ export default function NavMenu() {
         {sections.map((section, index) => (
           <NavLink
             color="inherit"
-            noWrap
             key={index}
             to={section.url}
             className={classes.toolbarLink}

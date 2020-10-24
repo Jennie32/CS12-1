@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Layout } from "./Layout";
 
-const ExecutionDetail = ({ route, navigation }) => {
-  const { itemId, otherParam } = route.params;
-  console.log(itemId, otherParam);
+const ExecutionDetail = () => {
   return (
     <>
       <Layout>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200">
-          <g id="Page-1" fill="none" fill-rule="evenodd">
+          <g id="Page-1" fill="none" fillRule="evenodd">
             <g id="Course-Template">
               <g id="arrows" transform="translate(163 98)">
                 <g id="arrows/arrow-1.2" transform="rotate(90 69.5 70)">
@@ -17,7 +15,7 @@ const ExecutionDetail = ({ route, navigation }) => {
                     <path
                       id="Line"
                       stroke="#89969F"
-                      stroke-linecap="square"
+                      strokeLinecap="square"
                       d="M.336 2.5h38.46"
                     />
                     <polygon
@@ -32,7 +30,7 @@ const ExecutionDetail = ({ route, navigation }) => {
                     <path
                       id="Line"
                       stroke="#89969F"
-                      stroke-linecap="square"
+                      strokeLinecap="square"
                       d="M.336 2.5h38.46"
                     />
                     <polygon
@@ -89,7 +87,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-content"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(259 56)"
               >
                 <rect
@@ -102,9 +100,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Content"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="23" y="25">
                     Start
@@ -113,7 +111,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-form"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(174 140)"
               >
                 <rect
@@ -126,9 +124,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Content"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="29.964" y="25">
                     Contractor claim payment
@@ -137,7 +135,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-media"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(184 224)"
               >
                 <rect
@@ -150,9 +148,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Content"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="25" y="25">
                     Superintendent confirm
@@ -161,7 +159,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-unity"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(240 496)"
               >
                 <rect
@@ -174,9 +172,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Content"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="8" y="25">
                     Get Payment
@@ -188,7 +186,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-elements"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(86 360)"
               >
                 <rect
@@ -201,9 +199,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Elements-of-Design"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="17" y="28">
                     Superintrndent
@@ -215,12 +213,12 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-principles"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(355 360)"
               >
                 <rect
                   id="Rectangle"
-                  dashed
+                  dashed="true"
                   width="155"
                   height="64"
                   fill="#F5FFE8"
@@ -229,9 +227,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Principles-of-Organi"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="35" y="28">
                     Reject and
@@ -248,7 +246,7 @@ const ExecutionDetail = ({ route, navigation }) => {
                     <path
                       id="Line"
                       stroke="#89969F"
-                      stroke-linecap="square"
+                      strokeLinecap="square"
                       d="M.336 2.5h38.46"
                     />
                     <polygon
@@ -264,7 +262,7 @@ const ExecutionDetail = ({ route, navigation }) => {
                     <path
                       id="Line"
                       stroke="#89969F"
-                      stroke-linecap="square"
+                      strokeLinecap="square"
                       d="M.336 2.5h38.46"
                     />
                     <polygon
@@ -280,7 +278,7 @@ const ExecutionDetail = ({ route, navigation }) => {
                     <path
                       id="Line"
                       stroke="#89969F"
-                      stroke-linecap="square"
+                      strokeLinecap="square"
                       d="M.336 2.5h38.46"
                     />
                     <polygon
@@ -316,7 +314,7 @@ const ExecutionDetail = ({ route, navigation }) => {
                     <path
                       id="Line"
                       stroke="#89969F"
-                      stroke-linecap="square"
+                      strokeLinecap="square"
                       d="M.336 2.5h38.46"
                     />
                     <polygon
@@ -331,7 +329,7 @@ const ExecutionDetail = ({ route, navigation }) => {
                     <path
                       id="Line"
                       stroke="#89969F"
-                      stroke-linecap="square"
+                      strokeLinecap="square"
                       d="M.336 2.5h38.46"
                     />
                     <polygon
@@ -369,7 +367,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-content"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(60 600)"
               >
                 <rect
@@ -382,9 +380,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Content"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="40" y="25">
                     Payment Claim and Certificate Issued to Principal
@@ -393,7 +391,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-form"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(130 684)"
               >
                 <rect
@@ -406,9 +404,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Content"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="29.964" y="25">
                     Save Payment Certificate state in DB
@@ -417,7 +415,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-media"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(225 768)"
               >
                 <rect
@@ -430,9 +428,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Content"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="15" y="25">
                     Payment choice
@@ -441,7 +439,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-unity"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(250 1145)"
               >
                 <rect
@@ -454,9 +452,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Content"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="33" y="21">
                     End
@@ -465,7 +463,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-elements"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(86 903)"
               >
                 <rect
@@ -478,9 +476,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Elements-of-Design"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="38" y="28">
                     Payment
@@ -492,12 +490,12 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-principles"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(355 903)"
               >
                 <rect
                   id="Rectangle"
-                  dashed
+                  dashed="true"
                   width="155"
                   height="64"
                   fill="#8BE5AD"
@@ -506,9 +504,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Principles-of-Organi"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="40" y="28">
                     Executes
@@ -520,7 +518,7 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-elements"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(70 1010)"
               >
                 <rect
@@ -533,9 +531,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Elements-of-Design"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="50" y="28">
                     Go to Direct
@@ -547,12 +545,12 @@ const ExecutionDetail = ({ route, navigation }) => {
               </g>
               <g
                 id="ep-principles"
-                class="ep-svg-block"
+                className="ep-svg-block"
                 transform="translate(328 1010)"
               >
                 <rect
                   id="Rectangle"
-                  dashed
+                  dashed="true"
                   width="200"
                   height="64"
                   fill="#8BE5AD"
@@ -561,9 +559,9 @@ const ExecutionDetail = ({ route, navigation }) => {
                 <text
                   id="Principles-of-Organi"
                   fill="#586075"
-                  font-family="Roboto-Regular, Roboto"
-                  font-size="18"
-                  letter-spacing="1"
+                  fontFamily="Roboto-Regular, Roboto"
+                  fontSize="18"
+                  letterSpacing="1"
                 >
                   <tspan x="27" y="28">
                     Place for Payment
