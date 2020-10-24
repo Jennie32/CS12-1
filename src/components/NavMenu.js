@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 const sections = [
   { title: " Payment Claim", url: "/" },
   { title: "Executions", url: "/execution-list" },
-  { title: "Under construction", url: "#" },
+  { title: "Execution Detail", url: "/execution-detail" },
   { title: "Under construction", url: "#" },
   { title: "Under construction", url: "#" },
 ];
