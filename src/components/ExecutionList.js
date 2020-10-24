@@ -13,8 +13,7 @@ export default function ExecutionList() {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
-  var dict = {};
-  var titles, status, descriptions, executionArns;
+  var descriptions, executionArns;
 
   async function getTitle(item) {
     if (item.hasOwnProperty("data")) {
@@ -91,10 +90,9 @@ export default function ExecutionList() {
     const fetchExecutions = async (event) => {
       executionArns = await getARNs();
       descriptions = await getDescriptions();
-      // const pairResults = await getTitlesAndStatus();
-      var executions = descriptions.map(function (e, i) {
+      var executions = descriptions.map(function (description, i) {
         let title, status, state;
-        [title, status, state] = e;
+        [title, status, state] = description;
         return [title, status, state];
       });
       setexecutionList(executions);
