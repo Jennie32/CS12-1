@@ -6,7 +6,7 @@ const ExecutionDetail = () => {
   return (
     <>
       <Layout>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 0 800 1200">
           <g id="Page-1" fill="none" fillRule="evenodd">
             <g id="Course-Template">
               <g id="arrows" transform="translate(163 98)">
