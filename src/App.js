@@ -11,7 +11,7 @@ function App() {
       <Router>
         <Route exact path="/" component={ClaimForm} />
         <Route path="/execution-list" component={ExecutionList} />
-        <Route path="/execution-detail" component={ExecutionDetail} />
+        <Route path="/execution-detail/:id" component={ExecutionDetail} />
       </Router>
     </div>
   );
