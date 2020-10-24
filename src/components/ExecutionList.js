@@ -13,7 +13,6 @@ export default function ExecutionList() {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
-  var details, executionArns;
 
   async function getTitle(item) {
     if (item.hasOwnProperty("data")) {
@@ -52,7 +51,7 @@ export default function ExecutionList() {
     return "not found";
   }
 
-  async function getDetails() {
+  async function getDetails(executionArns) {
     const asyncDescriptions = await Promise.all(
       executionArns.map(async (arn) => {
         const tempDescription = await axios.post(
@@ -89,8 +88,8 @@ export default function ExecutionList() {
 
   useEffect(() => {
     const fetchExecutions = async () => {
-      executionArns = await getARNs();
-      details = await getDetails();
+      const executionArns = await getARNs();
+      const details = await getDetails(executionArns);
       let executions = details.map((detail) => {
         let title, status, state, arn;
         [title, status, state, arn] = detail;
