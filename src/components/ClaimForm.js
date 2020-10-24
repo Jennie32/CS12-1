@@ -116,7 +116,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div>
+    <>
       <Layout>
         <Alert color="info" isOpen={visible} toggle={onDismiss}>
           Payment claim has been submitted!
@@ -186,6 +186,6 @@ export default function LoginForm() {
           </Container>{" "}
         </form>{" "}
       </Layout>{" "}
-    </div>
+    </>
   );
 }
