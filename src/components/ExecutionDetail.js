@@ -97,7 +97,7 @@ const ExecutionDetail = () => {
                   id="Rectangle"
                   width="81"
                   height="40"
-                  fill="#FFEC35"
+                  className="start-point"
                   rx="20"
                 />
                 <text
