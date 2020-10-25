@@ -9,6 +9,19 @@ export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
   const [loading, setloading] = useState(true);
   const history = useHistory();
+  var lookup = {
+    "Contractor claim payment": 1,
+    "Superintendent confirm": 2,
+    "Superintrndentconfirmed": 3,
+    "Reject and no action taken": 4,
+    "Get PaymentCertificate": 5,
+    "Payment Claim and Certificate Issued to Principal": 6,
+    "Save Payment Certificate state in DB": 7,
+    "Payment choice": 8,
+    "PaymentWithheld": 9,
+    "Executespayment": 10,
+  };
+
   const headers = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
@@ -79,7 +92,6 @@ export default function ExecutionList() {
           await getTitle(JSON.parse(tempDescription.data.input)),
           tempDescription.data.status,
           name,
-          arn.toString(),
         ];
       })
     );
@@ -91,9 +103,9 @@ export default function ExecutionList() {
       const executionArns = await getARNs();
       const details = await getDetails(executionArns);
       let executions = details.map((detail) => {
-        let title, status, state, arn;
-        [title, status, state, arn] = detail;
-        return [title, status, state, arn];
+        let title, status, state;
+        [title, status, state] = detail;
+        return [title, status, state];
       });
       setexecutionList(executions);
     };
@@ -103,8 +115,9 @@ export default function ExecutionList() {
     })();
   }, []);
 
-  const viewDetail = (arn) => {
-    history.push("/execution-detail/" + arn);
+  const viewDetail = (state) => {
+    let stateId = lookup[state.toString()];
+    history.push("/execution-detail/" + stateId);
   };
 
   return (
@@ -132,7 +145,7 @@ export default function ExecutionList() {
                     <div className="btn-container">
                       <Button
                         variant="text"
-                        onClick={() => viewDetail(item[3])}
+                        onClick={() => viewDetail(item[2])}
                       >
                         View
                       </Button>

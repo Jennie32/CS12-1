@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Layout } from "./Layout";
+import { useParams } from 'react-router-dom';
 
 const ExecutionDetail = () => {
+  const params = useParams();
+  const stateId = params.id;
   return (
     <>
       <Layout>
@@ -115,11 +118,14 @@ const ExecutionDetail = () => {
                 transform="translate(174 140)"
               >
                 <rect
-                  id="Rectangle"
-                  width="270"
+                  id="Rectangle-1"
+                  width="273"
                   height="40"
-                  fill="#8BE5AD"
                   rx="20"
+                  className={`
+                    ${stateId == 1 ? 'currentState' : ''}
+                    ${stateId >1 ? 'activated' : ''}
+                  `}
                 />
                 <text
                   id="Content"
@@ -139,11 +145,14 @@ const ExecutionDetail = () => {
                 transform="translate(184 224)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-2"
                   width="239"
                   height="40"
-                  fill="#8BE5AD"
                   rx="20"
+                  className={`
+                  ${stateId == 2 ? 'currentState' : ''}
+                  ${stateId >2 ? 'activated' : ''}
+                  `}
                 />
                 <text
                   id="Content"
@@ -163,10 +172,13 @@ const ExecutionDetail = () => {
                 transform="translate(240 496)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-5"
                   width="120"
                   height="60"
-                  fill="#8BE5AD"
+                  className={`
+                  ${stateId == 5 ? 'currentState' : ''}
+                  ${stateId >5 ? 'activated' : ''}
+                  `}
                   rx="20"
                 />
                 <text
@@ -190,11 +202,14 @@ const ExecutionDetail = () => {
                 transform="translate(86 360)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-3"
                   width="155"
                   height="64"
-                  fill="#8BE5AD"
                   rx="37"
+                  className={`
+                  ${stateId == 3 ? 'currentState' : ''}
+                  ${stateId >3 ? 'activated' : ''}
+                  `}
                 />
                 <text
                   id="Elements-of-Design"
@@ -217,12 +232,15 @@ const ExecutionDetail = () => {
                 transform="translate(355 360)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-4"
                   dashed="true"
                   width="155"
                   height="64"
-                  fill="#F5FFE8"
                   rx="37"
+                  className={`
+                  ${stateId == 4 ? 'currentState' : ''}
+                  ${stateId >4 ? 'activated' : ''}
+                  `}
                 />
                 <text
                   id="Principles-of-Organi"
@@ -371,10 +389,13 @@ const ExecutionDetail = () => {
                 transform="translate(60 600)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-6"
                   width="500"
                   height="40"
-                  fill="#8BE5AD"
+                  className={`
+                  ${stateId == 6 ? 'currentState' : ''}
+                  ${stateId >6 ? 'activated' : ''}
+                  `}
                   rx="20"
                 />
                 <text
@@ -395,10 +416,13 @@ const ExecutionDetail = () => {
                 transform="translate(130 684)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-7"
                   width="360"
                   height="40"
-                  fill="#8BE5AD"
+                  className={`
+                  ${stateId == 7 ? 'currentState' : ''}
+                  ${stateId >7 ? 'activated' : ''}
+                  `}
                   rx="20"
                 />
                 <text
@@ -419,10 +443,13 @@ const ExecutionDetail = () => {
                 transform="translate(225 768)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-8"
                   width="155"
                   height="40"
-                  fill="#8BE5AD"
+                  className={`
+                  ${stateId ==  8 ? 'currentState' : ''}
+                  ${stateId >8 ? 'activated' : ''}
+                  `}
                   rx="20"
                 />
                 <text
@@ -467,10 +494,13 @@ const ExecutionDetail = () => {
                 transform="translate(86 903)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-9"
                   width="155"
                   height="64"
-                  fill="#8BE5AD"
+                  className={`
+                  ${stateId == 9 ? 'currentState' : ''}
+                  ${stateId >9 ? 'activated' : ''}
+                  `}
                   rx="37"
                 />
                 <text
@@ -494,11 +524,14 @@ const ExecutionDetail = () => {
                 transform="translate(355 903)"
               >
                 <rect
-                  id="Rectangle"
+                  id="Rectangle-10"
                   dashed="true"
                   width="155"
                   height="64"
-                  fill="#8BE5AD"
+                  className={`
+                  ${stateId == 10 ? 'currentState' : ''}
+                  ${stateId >10 ? 'activated' : ''}
+                  `}
                   rx="37"
                 />
                 <text

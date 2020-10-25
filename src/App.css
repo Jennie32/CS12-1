@@ -8,6 +8,18 @@
   pointer-events: none;
 }
 
+.activated {
+  fill: #8BE5AD;
+}
+
+.currentState {
+  fill: grey;
+}
+
+rect {
+  fill: lightblue;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
