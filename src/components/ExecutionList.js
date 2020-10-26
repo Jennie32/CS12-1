@@ -9,18 +9,6 @@ export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
   const [loading, setloading] = useState(true);
   const history = useHistory();
-  var lookup = {
-    "Contractor claim payment": 1,
-    "Superintendent confirm": 2,
-    "Superintrndentconfirmed": 3,
-    "Reject and no action taken": 4,
-    "Get PaymentCertificate": 5,
-    "Payment Claim and Certificate Issued to Principal": 6,
-    "Save Payment Certificate state in DB": 7,
-    "Payment choice": 8,
-    "PaymentWithheld": 9,
-    "Executespayment": 10,
-  };
 
   const headers = {
     "Content-Type": "application/json",
@@ -87,11 +75,13 @@ export default function ExecutionList() {
         );
 
         const name = await getName(executionHistories.data.events);
-
+        const parsedDataInput = JSON.parse(tempDescription.data.input);
+        const amount = parsedDataInput.data.amount;
         return [
-          await getTitle(JSON.parse(tempDescription.data.input)),
+          await getTitle(parsedDataInput),
           tempDescription.data.status,
           name,
+          amount
         ];
       })
     );
@@ -103,9 +93,9 @@ export default function ExecutionList() {
       const executionArns = await getARNs();
       const details = await getDetails(executionArns);
       let executions = details.map((detail) => {
-        let title, status, state;
-        [title, status, state] = detail;
-        return [title, status, state];
+        let title, status, state, amount;
+        [title, status, state, amount] = detail;
+        return {"title": title, "status": status, "state": state, "amount": amount};
       });
       setexecutionList(executions);
     };
@@ -115,9 +105,13 @@ export default function ExecutionList() {
     })();
   }, []);
 
-  const viewDetail = (state) => {
-    let stateId = lookup[state.toString()];
-    history.push("/execution-detail/" + stateId);
+  const viewDetail = (params) => {
+    history.push({
+      pathname: "/execution-detail/",
+      state: {
+        ...params
+      },
+    })
   };
 
   return (
@@ -138,14 +132,14 @@ export default function ExecutionList() {
             <tbody>
               {executionList.map((item, index) => (
                 <tr key={index}>
-                  <td>{item[0]}</td>
-                  <td>{item[1]}</td>
-                  <td>{item[2]}</td>
+                  <td>{item.title}</td>
+                  <td>{item.status}</td>
+                  <td>{item.state}</td>
                   <td>
                     <div className="btn-container">
                       <Button
                         variant="text"
-                        onClick={() => viewDetail(item[2])}
+                        onClick={() => viewDetail(item)}
                       >
                         View
                       </Button>

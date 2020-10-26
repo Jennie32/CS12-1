@@ -1,15 +1,46 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Layout } from "./Layout";
-import { useParams } from 'react-router-dom';
+import { useHistory } from "react-router";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const ExecutionDetail = () => {
-  const params = useParams();
-  const stateId = params.id;
+  const [stateId, setstateId] = useState();
+  const [statesDict, setstatesDict] = useState({});
+  const history = useHistory();
+  const stateLookup = {
+    "Contractor claim payment": 1,
+    "Superintendent confirm": 2,
+    "Superintrndentconfirmed": 3,
+    "Reject and no action taken": 4,
+    "Get PaymentCertificate": 5,
+    "Payment Claim and Certificate Issued to Principal": 6,
+    "Save Payment Certificate state in DB": 7,
+    "Payment choice": 8,
+    "PaymentWithheld": 9,
+    "Executespayment": 10,
+  };
+
+  useEffect(() => {
+    if (history.location.state == null) {
+      history.push({
+        pathname: "/execution-list"
+      })
+    } else {
+      setstatesDict(history.location.state);
+      setstateId(stateLookup[statesDict.state]);
+    }
+  });
+
   return (
     <>
       <Layout>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 0 800 1200">
+        <div style={{"display": "flex", "justifyContent": "center"}}>
+          <div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 0 800 1200">
           <g id="Page-1" fill="none" fillRule="evenodd">
             <g id="Course-Template">
               <g id="arrows" transform="translate(163 98)">
@@ -173,7 +204,7 @@ const ExecutionDetail = () => {
               >
                 <rect
                   id="Rectangle-5"
-                  width="120"
+                  width="130"
                   height="60"
                   className={`
                   ${stateId == 5 ? 'currentState' : ''}
@@ -234,7 +265,7 @@ const ExecutionDetail = () => {
                 <rect
                   id="Rectangle-4"
                   dashed="true"
-                  width="155"
+                  width="160"
                   height="64"
                   rx="37"
                   className={`
@@ -607,6 +638,17 @@ const ExecutionDetail = () => {
             </g>
           </g>
         </svg>
+          </div>
+          <div>
+            {Object.keys(statesDict).map((key, index) => 
+              <List key={`item-${index}`} component="nav" aria-label="contacts">
+                <ListItem key={`item-${index}`}>
+                  <ListItemText primary={`${key.toUpperCase()}: ${statesDict[key]}`} />
+                </ListItem>
+              </List>
+            )}
+          </div>
+        </div>
       </Layout>
     </>
   );
