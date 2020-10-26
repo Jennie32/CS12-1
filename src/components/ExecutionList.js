@@ -10,11 +10,6 @@ export default function ExecutionList() {
   const [loading, setloading] = useState(true);
   const history = useHistory();
 
-  const headers = {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-  };
-
   async function getTitle(item) {
     if (item.hasOwnProperty("data")) {
       if (item.data.hasOwnProperty("claim_title")) {
@@ -22,22 +17,6 @@ export default function ExecutionList() {
       }
     }
     return "not found";
-  }
-
-  async function getARNs() {
-    let result = await axios.post(
-      "https://oys6sr3oo2.execute-api.eu-central-1.amazonaws.com/dev/execution",
-      {
-        maxResults: 20,
-        stateMachineArn:
-          "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
-      },
-      headers
-    );
-    var Arnresults = result.data.executions.map(
-      (execution) => execution.executionArn
-    );
-    return Arnresults;
   }
 
   async function getName(events) {
@@ -52,43 +31,64 @@ export default function ExecutionList() {
     return "not found";
   }
 
-  async function getDetails(executionArns) {
-    const asyncDescriptions = await Promise.all(
-      executionArns.map(async (arn) => {
-        const tempDescription = await axios.post(
-          "https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/describeexecution",
-          {
-            executionArn: arn.toString(),
-          },
-          headers
-        );
-
-        const executionHistories = await axios.post(
-          "https://prf7e0psi7.execute-api.eu-central-1.amazonaws.com/beta/execution",
-          {
-            executionArn: arn.toString(),
-            includeExecutionData: true,
-            maxResults: 10,
-            reverseOrder: true,
-          },
-          headers
-        );
-
-        const name = await getName(executionHistories.data.events);
-        const parsedDataInput = JSON.parse(tempDescription.data.input);
-        const amount = parsedDataInput.data.amount;
-        return [
-          await getTitle(parsedDataInput),
-          tempDescription.data.status,
-          name,
-          amount
-        ];
-      })
-    );
-    return asyncDescriptions;
-  }
-
   useEffect(() => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    };
+    async function getDetails(executionArns) {
+      const asyncDescriptions = await Promise.all(
+        executionArns.map(async (arn) => {
+          const tempDescription = await axios.post(
+            "https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/describeexecution",
+            {
+              executionArn: arn.toString(),
+            },
+            headers
+          );
+  
+          const executionHistories = await axios.post(
+            "https://prf7e0psi7.execute-api.eu-central-1.amazonaws.com/beta/execution",
+            {
+              executionArn: arn.toString(),
+              includeExecutionData: true,
+              maxResults: 10,
+              reverseOrder: true,
+            },
+            headers
+          );
+  
+          const name = await getName(executionHistories.data.events);
+          const parsedDataInput = JSON.parse(tempDescription.data.input);
+          const amount = parsedDataInput.data.amount;
+          return [
+            await getTitle(parsedDataInput),
+            tempDescription.data.status,
+            name,
+            amount
+          ];
+        })
+      );
+      return asyncDescriptions;
+    }
+
+    async function getARNs() {
+      let result = await axios.post(
+        "https://oys6sr3oo2.execute-api.eu-central-1.amazonaws.com/dev/execution",
+        {
+          maxResults: 20,
+          stateMachineArn:
+            "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
+        },
+        headers
+      );
+      var Arnresults = result.data.executions.map(
+        (execution) => execution.executionArn
+      );
+      return Arnresults;
+    }
+
+
     const fetchExecutions = async () => {
       const executionArns = await getARNs();
       const details = await getDetails(executionArns);
