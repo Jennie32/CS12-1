@@ -33,7 +33,7 @@ const ExecutionDetail = () => {
       setstatesDict(history.location.state);
       setstateId(stateLookup[statesDict.state]);
     }
-  });
+  }, [history, stateLookup, statesDict.state]);
 
   return (
     <>
