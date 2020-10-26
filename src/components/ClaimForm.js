@@ -58,28 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const tiers = [
-  {
-    title: "Workflow 1",
-    description: ["Payment"],
-    buttonText: "Start",
-    buttonVariant: "outlined",
-  },
-  {
-    title: "Workflow 2",
-    description: ["Workflow2"],
-    buttonText: "Start",
-    buttonVariant: "outlined",
-  },
-  {
-    title: "Workflow 3",
-    description: ["Workflow3"],
-    buttonText: "Start",
-    buttonVariant: "outlined",
-  },
-];
-
-export default function LoginForm() {
+export default function ClaimForm() {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [title, setTitle] = useState("");

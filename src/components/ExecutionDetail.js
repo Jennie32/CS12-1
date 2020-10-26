@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Layout } from "./Layout";
 import { useHistory } from "react-router";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
 const ExecutionDetail = () => {
@@ -25,7 +23,7 @@ const ExecutionDetail = () => {
   };
 
   useEffect(() => {
-    if (history.location.state == null) {
+    if (history.location.state === null) {
       history.push({
         pathname: "/execution-list"
       })
@@ -154,7 +152,7 @@ const ExecutionDetail = () => {
                   height="40"
                   rx="20"
                   className={`
-                    ${stateId == 1 ? 'currentState' : ''}
+                    ${stateId === 1 ? 'currentState' : ''}
                     ${stateId >1 ? 'activated' : ''}
                   `}
                 />
@@ -181,7 +179,7 @@ const ExecutionDetail = () => {
                   height="40"
                   rx="20"
                   className={`
-                  ${stateId == 2 ? 'currentState' : ''}
+                  ${stateId === 2 ? 'currentState' : ''}
                   ${stateId >2 ? 'activated' : ''}
                   `}
                 />
@@ -207,7 +205,7 @@ const ExecutionDetail = () => {
                   width="130"
                   height="60"
                   className={`
-                  ${stateId == 5 ? 'currentState' : ''}
+                  ${stateId === 5 ? 'currentState' : ''}
                   ${stateId >5 ? 'activated' : ''}
                   `}
                   rx="20"
@@ -238,7 +236,7 @@ const ExecutionDetail = () => {
                   height="64"
                   rx="37"
                   className={`
-                  ${stateId == 3 ? 'currentState' : ''}
+                  ${stateId === 3 ? 'currentState' : ''}
                   ${stateId >3 ? 'activated' : ''}
                   `}
                 />
@@ -269,7 +267,7 @@ const ExecutionDetail = () => {
                   height="64"
                   rx="37"
                   className={`
-                  ${stateId == 4 ? 'currentState' : ''}
+                  ${stateId === 4 ? 'currentState' : ''}
                   ${stateId >4 ? 'activated' : ''}
                   `}
                 />
@@ -424,7 +422,7 @@ const ExecutionDetail = () => {
                   width="500"
                   height="40"
                   className={`
-                  ${stateId == 6 ? 'currentState' : ''}
+                  ${stateId === 6 ? 'currentState' : ''}
                   ${stateId >6 ? 'activated' : ''}
                   `}
                   rx="20"
@@ -451,7 +449,7 @@ const ExecutionDetail = () => {
                   width="360"
                   height="40"
                   className={`
-                  ${stateId == 7 ? 'currentState' : ''}
+                  ${stateId === 7 ? 'currentState' : ''}
                   ${stateId >7 ? 'activated' : ''}
                   `}
                   rx="20"
@@ -478,7 +476,7 @@ const ExecutionDetail = () => {
                   width="165"
                   height="40"
                   className={`
-                  ${stateId ==  8 ? 'currentState' : ''}
+                  ${stateId ===  8 ? 'currentState' : ''}
                   ${stateId >8 ? 'activated' : ''}
                   `}
                   rx="20"
@@ -529,7 +527,7 @@ const ExecutionDetail = () => {
                   width="155"
                   height="64"
                   className={`
-                  ${stateId == 9 ? 'currentState' : ''}
+                  ${stateId === 9 ? 'currentState' : ''}
                   ${stateId >9 ? 'activated' : ''}
                   `}
                   rx="37"
@@ -560,7 +558,7 @@ const ExecutionDetail = () => {
                   width="155"
                   height="64"
                   className={`
-                  ${stateId == 10 ? 'currentState' : ''}
+                  ${stateId === 10 ? 'currentState' : ''}
                   ${stateId >10 ? 'activated' : ''}
                   `}
                   rx="37"
