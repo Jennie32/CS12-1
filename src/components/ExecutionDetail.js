@@ -475,7 +475,7 @@ const ExecutionDetail = () => {
               >
                 <rect
                   id="Rectangle-8"
-                  width="155"
+                  width="165"
                   height="40"
                   className={`
                   ${stateId ==  8 ? 'currentState' : ''}
