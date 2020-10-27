@@ -4,6 +4,23 @@ import { useHistory } from "react-router";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Container from '@material-ui/core/Container';
+
+const useStyles = makeStyles({
+  card: {
+    display: 'flex',
+    
+  },
+  cardDetails: {
+    flex: 1,
+    
+  },
+  
+});
 
 const ExecutionDetail = () => {
   const [stateId, setstateId] = useState();
@@ -33,12 +50,19 @@ const ExecutionDetail = () => {
     }
   }, [history, stateLookup, statesDict.state]);
 
-  return (
-    <>
-      <Layout>
-        <div style={{"display": "flex", "justifyContent": "center"}}>
-          <div>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 0 800 1200">
+  const classes = useStyles();
+  
+
+  return (    
+    <Layout> 
+      <div className={classes.card}>
+        <Card className={classes.cardDetails}>
+          
+            <CardContent>
+            <Typography component="h2" variant="h5">
+            Workflow Diagram 
+            </Typography>              
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 0 800 1200">
           <g id="Page-1" fill="none" fillRule="evenodd">
             <g id="Course-Template">
               <g id="arrows" transform="translate(163 98)">
@@ -635,20 +659,29 @@ const ExecutionDetail = () => {
               </g>
             </g>
           </g>
-        </svg>
-          </div>
-          <div>
-            {Object.keys(statesDict).map((key, index) => 
-              <List key={`item-${index}`} component="nav" aria-label="contacts">
-                <ListItem key={`item-${index}`}>
-                  <ListItemText primary={`${key.toUpperCase()}: ${statesDict[key]}`} />
-                </ListItem>
-              </List>
-            )}
-          </div>
-        </div>
-      </Layout>
-    </>
+        </svg>           
+            </CardContent>
+        </Card>
+        <Card className={classes.card}>   
+            <CardContent>               
+                                        
+                  {Object.keys(statesDict).map((key, index) => 
+                    <Typography component="h2" variant="h5">
+
+                    <List key={`item-${index}`} component="nav" aria-label="contacts">
+                      
+                      <ListItem key={`item-${index}`}>
+                        <ListItemText primary={`${key.toUpperCase()}: ${statesDict[key]}`} />
+                      </ListItem>
+                    </List>
+                    </Typography>
+                  )}                    
+                           
+            </CardContent>
+                  
+        </Card>
+      </div>  
+    </Layout>    
   );
 };
 
