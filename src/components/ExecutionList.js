@@ -11,20 +11,32 @@ export default function ExecutionList() {
   const history = useHistory();
 
   async function getTitle(item) {
-    if (item.hasOwnProperty("data")) {
-      if (item.data.hasOwnProperty("claim_title")) {
-        return item.data.claim_title;
+    let title = "not found";
+    if (item !== null) {
+      if (item.hasOwnProperty("data")) {
+        if (item.data.hasOwnProperty("claim_title")) {
+          title = item.data.claim_title;
+        }
       }
     }
-    return "not found";
+    return title;
+  }
+
+  async function getAmount(parsedDataInput) {
+    let amount = 0;
+    if (parsedDataInput !== null) {
+      if (parsedDataInput.hasOwnProperty("data")) {
+        if (parsedDataInput.data.hasOwnProperty("amount")) {
+          amount = parsedDataInput.data.amount;
+        }
+      }
+    }
+    return amount;
   }
 
   async function getName(events) {
     for (const event of events) {
-      if (
-        "stateEnteredEventDetails" in event &&
-        "name" in event.stateEnteredEventDetails
-      ) {
+      if ("stateEnteredEventDetails" in event && "name" in event.stateEnteredEventDetails) {
         return event.stateEnteredEventDetails.name;
       }
     }
@@ -46,7 +58,7 @@ export default function ExecutionList() {
             },
             headers
           );
-  
+
           const executionHistories = await axios.post(
             "https://prf7e0psi7.execute-api.eu-central-1.amazonaws.com/beta/execution",
             {
@@ -57,16 +69,12 @@ export default function ExecutionList() {
             },
             headers
           );
-  
+
           const name = await getName(executionHistories.data.events);
           const parsedDataInput = JSON.parse(tempDescription.data.input);
-          const amount = parsedDataInput.data.amount;
-          return [
-            await getTitle(parsedDataInput),
-            tempDescription.data.status,
-            name,
-            amount
-          ];
+          const amount = await getAmount(parsedDataInput);
+
+          return [await getTitle(parsedDataInput), tempDescription.data.status, name, amount];
         })
       );
       return asyncDescriptions;
@@ -77,17 +85,13 @@ export default function ExecutionList() {
         "https://oys6sr3oo2.execute-api.eu-central-1.amazonaws.com/dev/execution",
         {
           maxResults: 20,
-          stateMachineArn:
-            "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
+          stateMachineArn: "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
         },
         headers
       );
-      var Arnresults = result.data.executions.map(
-        (execution) => execution.executionArn
-      );
+      var Arnresults = result.data.executions.map((execution) => execution.executionArn);
       return Arnresults;
     }
-
 
     const fetchExecutions = async () => {
       const executionArns = await getARNs();
@@ -95,7 +99,7 @@ export default function ExecutionList() {
       let executions = details.map((detail) => {
         let title, status, state, amount;
         [title, status, state, amount] = detail;
-        return {"title": title, "status": status, "state": state, "amount": amount};
+        return { title: title, status: status, state: state, amount: amount };
       });
       setexecutionList(executions);
     };
@@ -109,9 +113,9 @@ export default function ExecutionList() {
     history.push({
       pathname: "/execution-detail/",
       state: {
-        ...params
+        ...params,
       },
-    })
+    });
   };
 
   return (
@@ -137,10 +141,7 @@ export default function ExecutionList() {
                   <td>{item.state}</td>
                   <td>
                     <div className="btn-container">
-                      <Button
-                        variant="text"
-                        onClick={() => viewDetail(item)}
-                      >
+                      <Button variant="text" onClick={() => viewDetail(item)}>
                         View
                       </Button>
                     </div>
