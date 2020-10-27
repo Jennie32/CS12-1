@@ -8,8 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Layout } from "./Layout";
 import { Alert } from "reactstrap";
-import { aws4Interceptor } from "aws4-axios";
-import {Signer} from '@aws-amplify/core';
+import aws4 from 'aws4';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -80,117 +79,36 @@ export default function ClaimForm() {
       superintendent_id: "9e8c8da9-4e47-4f7f-b32e-1628eddc5b8c",
     };
 
-    // const interceptor = aws4Interceptor({
-    //     region: "eu-central-1",
-    //     service: "execute-api"
-    //   });
-    // axios.interceptors.request.use(interceptor);
- 
-    // // Requests made using Axios will now be signed
-    // axios.get("https://80sk3kuhta.execute-api.eu-central-1.amazonaws.com/dev").then(res => {
-    //   console.log("response: ",res);
-    // });
-
-
-    
-
-    let request = {         
-        method: 'POST',
-        url: 'https://polly.eu-west-1.amazonaws.com/v1/voices?Engine=neural&IncludeAdditionalLanguageCodes=no&LanguageCode=en-US',
-        data: '' 
-    } 
-    let access_info = {
-        access_key: xxxxx, 
-        secret_key: xxxxxx,
-        session_token: xxxxx
-    }
-    let service_info = {
-        service: 'polly',
-        region: 'eu-west-1'
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    };
+    let request = {
+      host: 'wid4bo7v0k.execute-api.eu-central-1.amazonaws.com',
+      method: 'POST',
+      url: `https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/start`,
+      data: data, // object describing the data
+      body: JSON.stringify(data), // aws4 looks for body; axios for data
+      path: `/alpha/start`,
+      headers: {
+        'content-type': 'application/json'
+      }
     }
 
-
-    //use amplify sign()function to create the signed headers;
-    let signedRequest =  Signer.sign(request,access_info,service_info)
-
-    //remove host from header
-    delete signedRequest.headers['host']
-
-    //I normally create an instance if I need to intercept my response or request
-    var instance = axios.create();
-
-
-    let response = await instance(signedRequest).then(function (response) {    
-       console.log(response);
-       return response
-
-     }).catch(function (error) {
-
-         //... handle errors
-
-     });
-
-    // const client = axios.create();
-
-    // const interceptor = aws4Interceptor({
-    //   region: "eu-central-1",
-    //   service: "execute-api"
-    // }, {
-    //   accessKeyId: 'Fkt/s1PDm8nz8kqXcRsmx4D7jOXmC2tb4WCIfMDd',
-    //   secretAccessKey: 'AKIAZJQLKDCX7HBBUAMW'
-    // });
+    let signedRequest = aws4.sign(request,
+      {
+        // assumes user has authenticated and we have called
+        // AWS.config.credentials.get to retrieve keys and
+        // session tokens
+        secretAccessKey: process.env.REACT_APP_SECRETACCESSKEY,
+        accessKeyId: process.env.REACT_APP_ACCESSKEYID
+      })
     
-    // client.interceptors.request.use(interceptor);
-    
-    // // Requests made using Axios will now be signed
-    // client.get("https://80sk3kuhta.execute-api.eu-central-1.amazonaws.com/dev").then(res => {
-    //   console.log("response: ",res);
-    // });
+    delete signedRequest.headers['Host']
+    delete signedRequest.headers['Content-Length']
+  
+    await axios(signedRequest)
 
-    // let request = {
-    //   host: 'b8l77g698i.execute-api.eu-central-1.amazonaws.com',
-    //   method: 'POST',
-    //   url: `https://b8l77g698i.execute-api.eu-central-1.amazonaws.com/Stage/execution`,
-    //   data: {
-    //     id: "573cf6e7-8caf-46f2-9805-bab6771066f2",
-    //     claim_title: title,
-    //     submitted_by: name,
-    //     amount: amount,
-    //     contract_id: "f8511f21-9d77-45c9-b0c3-fd0b2697c747",
-    //     principal_id: "3d48d94c-9b1f-451a-b6cb-690f87789c60",
-    //     superintendent_id: "9e8c8da9-4e47-4f7f-b32e-1628eddc5b8c",
-    //   }, // object describing the foo
-    //   body: (data), // aws4 looks for body; axios for data
-    //   path: `Stage/execution`,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*"
-    //   }
-    // }
-    
-    // let signedRequest = aws4.sign(request,
-    //   {
-    //     // assumes user has authenticated and we have called
-    //     // AWS.config.credentials.get to retrieve keys and
-    //     // session tokens
-    //     secretAccessKey: "AKIAZJQLKDCX7HBBUAMW",
-    //     accessKeyId: "Fkt/s1PDm8nz8kqXcRsmx4D7jOXmC2tb4WCIfMDd"
-    //   })
-    //   delete signedRequest.headers['Host']
-    //   delete signedRequest.headers['Content-Length']
-
-    //  let response = await axios(signedRequest);
-    //  console.log("response: ", response);
-
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   "Access-Control-Allow-Origin": "*",
-    // };
-    // await axios.post(
-    //   "https://b8l77g698i.execute-api.eu-central-1.amazonaws.com/Stage/execution",
-    //   { data },
-    //   headers
-    // );
     setVisible(true);
     setName("");
     setAmount("");
