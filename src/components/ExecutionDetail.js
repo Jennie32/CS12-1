@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles({
   card: {
@@ -31,12 +30,14 @@ const ExecutionDetail = () => {
     "Superintendent confirm": 2,
     "Superintrndentconfirmed": 3,
     "Reject and no action taken": 4,
-    "Get PaymentCertificate": 5,
+    "Get Payment Certificate": 5,
     "Payment Claim and Certificate Issued to Principal": 6,
     "Save Payment Certificate state in DB": 7,
     "Payment choice": 8,
     "PaymentWithheld": 9,
     "Executespayment": 10,
+    "Go to Direct Payment Workflow": 11,
+    "Place for Payment Place of Business": 12
   };
 
   useEffect(() => {
@@ -664,19 +665,16 @@ const ExecutionDetail = () => {
         </Card>
         <Card className={classes.card}>   
             <CardContent>               
-                                        
+              <Typography component="h2" variant="h5">                
                   {Object.keys(statesDict).map((key, index) => 
-                    <Typography component="h2" variant="h5">
-
-                    <List key={`item-${index}`} component="nav" aria-label="contacts">
-                      
-                      <ListItem key={`item-${index}`}>
-                        <ListItemText primary={`${key.toUpperCase()}: ${statesDict[key]}`} />
-                      </ListItem>
-                    </List>
-                    </Typography>
+                      <List key={`item-${index}`} component="nav" aria-label="contacts">
+                        <ListItem key={`item-${index}`}>
+                          <ListItemText primary={`${key.toUpperCase()}: ${statesDict[key]}`} />
+                        </ListItem>
+                      </List>
+                    
                   )}                    
-                           
+              </Typography>       
             </CardContent>
                   
         </Card>
