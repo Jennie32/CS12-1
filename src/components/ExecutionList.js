@@ -13,10 +13,8 @@ export default function ExecutionList() {
   async function getTitle(item) {
     let title = "not found";
     if (item !== null) {
-      if (item.hasOwnProperty("data")) {
-        if (item.data.hasOwnProperty("claim_title")) {
-          title = item.data.claim_title;
-        }
+      if (item.hasOwnProperty("claim_title")) {
+        title = item.claim_title;
       }
     }
     return title;
@@ -34,7 +32,7 @@ export default function ExecutionList() {
     return amount;
   }
 
-  async function getName(events) {
+  async function getStateName(events) {
     for (const event of events) {
       if ("stateEnteredEventDetails" in event && "name" in event.stateEnteredEventDetails) {
         return event.stateEnteredEventDetails.name;
@@ -69,12 +67,11 @@ export default function ExecutionList() {
             },
             headers
           );
-
-          const name = await getName(executionHistories.data.events);
+            
+          const stateName = await getStateName(executionHistories.data.events);
           const parsedDataInput = JSON.parse(tempDescription.data.input);
           const amount = await getAmount(parsedDataInput);
-
-          return [await getTitle(parsedDataInput), tempDescription.data.status, name, amount];
+          return [await getTitle(parsedDataInput), tempDescription.data.status, stateName, amount];
         })
       );
       return asyncDescriptions;
