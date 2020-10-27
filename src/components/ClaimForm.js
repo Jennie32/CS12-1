@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Layout } from "./Layout";
 import { Alert } from "reactstrap";
-import aws4 from 'aws4';
+import aws4 from "aws4";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -63,56 +63,61 @@ export default function ClaimForm() {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [title, setTitle] = useState("");
+  const [superintendentEmail, setSEmail] = useState("");
+  const [principleEmail, setPEmail] = useState("");
+  const [claimId, setClaimId] = useState("");
   const [visible, setVisible] = useState(false);
+
   const classes = useStyles();
+
   const onDismiss = () => setVisible(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
       id: "573cf6e7-8caf-46f2-9805-bab6771066f2",
-      claim_title: title,
       submitted_by: name,
       amount: amount,
+      claim_title: title,
+      superintendent_email: superintendentEmail,
+      principle_email: principleEmail,
+      claim_id: claimId,
       contract_id: "f8511f21-9d77-45c9-b0c3-fd0b2697c747",
-      principal_id: "3d48d94c-9b1f-451a-b6cb-690f87789c60",
+      principle_id: "3d48d94c-9b1f-451a-b6cb-690f87789c60",
       superintendent_id: "9e8c8da9-4e47-4f7f-b32e-1628eddc5b8c",
     };
 
-    const headers = {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    };
     let request = {
-      host: 'wid4bo7v0k.execute-api.eu-central-1.amazonaws.com',
-      method: 'POST',
+      host: "wid4bo7v0k.execute-api.eu-central-1.amazonaws.com",
+      method: "POST",
       url: `https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/start`,
       data: data, // object describing the data
       body: JSON.stringify(data), // aws4 looks for body; axios for data
       path: `/alpha/start`,
       headers: {
-        'content-type': 'application/json'
-      }
-    }
+        "content-type": "application/json",
+      },
+    };
 
-    let signedRequest = aws4.sign(request,
-      {
-        // assumes user has authenticated and we have called
-        // AWS.config.credentials.get to retrieve keys and
-        // session tokens
-        secretAccessKey: process.env.REACT_APP_SECRETACCESSKEY,
-        accessKeyId: process.env.REACT_APP_ACCESSKEYID
-      })
-    
-    delete signedRequest.headers['Host']
-    delete signedRequest.headers['Content-Length']
-  
-    await axios(signedRequest)
+    let signedRequest = aws4.sign(request, {
+      // assumes user has authenticated and we have called
+      // AWS.config.credentials.get to retrieve keys and
+      // session tokens
+      secretAccessKey: process.env.REACT_APP_SECRETACCESSKEY,
+      accessKeyId: process.env.REACT_APP_ACCESSKEYID,
+    });
 
+    delete signedRequest.headers["Host"];
+    delete signedRequest.headers["Content-Length"];
+
+    await axios(signedRequest);
     setVisible(true);
     setName("");
     setAmount("");
     setTitle("");
+    setSEmail("");
+    setPEmail("");
+    setClaimId("");
   };
 
   return (
@@ -120,7 +125,7 @@ export default function ClaimForm() {
       <Layout>
         <Alert color="info" isOpen={visible} toggle={onDismiss}>
           Payment claim has been submitted!
-        </Alert>
+        </Alert>{" "}
         <form onSubmit={handleSubmit} className={classes.title}>
           <Typography component="h1" variant="h2">
             Workflow System{" "}
@@ -168,8 +173,43 @@ export default function ClaimForm() {
                 onChange={(e) => setTitle(e.target.value)}
                 id="claimTitle"
               />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="superintendent email"
+                label="Superintendent Email"
+                type="email"
+                value={superintendentEmail}
+                onChange={(e) => setSEmail(e.target.value)}
+                id="superintendentEmail"
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="principle email"
+                label="Principle Emaill"
+                type="email"
+                value={principleEmail}
+                onChange={(e) => setPEmail(e.target.value)}
+                id="principleEmail"
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="claim id"
+                label="Mastt Claim Id (Optional)"
+                type="text"
+                value={claimId}
+                onChange={(e) => setClaimId(e.target.value)}
+                id="claimId"
+              />
             </div>{" "}
-          </Container>
+          </Container>{" "}
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className="rem_sub">
