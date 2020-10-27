@@ -175,7 +175,7 @@ const ExecutionDetail = () => {
               >
                 <rect
                   id="Rectangle-2"
-                  width="239"
+                  width="245"
                   height="40"
                   rx="20"
                   className={`
@@ -263,7 +263,7 @@ const ExecutionDetail = () => {
                 <rect
                   id="Rectangle-4"
                   dashed="true"
-                  width="160"
+                  width="165"
                   height="64"
                   rx="37"
                   className={`
@@ -446,7 +446,7 @@ const ExecutionDetail = () => {
               >
                 <rect
                   id="Rectangle-7"
-                  width="360"
+                  width="370"
                   height="40"
                   className={`
                   ${stateId === 7 ? 'currentState' : ''}

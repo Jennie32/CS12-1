@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import { Layout } from "./Layout";
 import { Alert } from "reactstrap";
 import { aws4Interceptor } from "aws4-axios";
+import {Signer} from '@aws-amplify/core';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -79,16 +80,55 @@ export default function ClaimForm() {
       superintendent_id: "9e8c8da9-4e47-4f7f-b32e-1628eddc5b8c",
     };
 
-    const interceptor = aws4Interceptor({
-        region: "eu-central-1",
-        service: "execute-api"
-      });
-    axios.interceptors.request.use(interceptor);
+    // const interceptor = aws4Interceptor({
+    //     region: "eu-central-1",
+    //     service: "execute-api"
+    //   });
+    // axios.interceptors.request.use(interceptor);
  
-    // Requests made using Axios will now be signed
-    axios.get("https://80sk3kuhta.execute-api.eu-central-1.amazonaws.com/dev").then(res => {
-      console.log("response: ",res);
-    });
+    // // Requests made using Axios will now be signed
+    // axios.get("https://80sk3kuhta.execute-api.eu-central-1.amazonaws.com/dev").then(res => {
+    //   console.log("response: ",res);
+    // });
+
+
+    
+
+    let request = {         
+        method: 'POST',
+        url: 'https://polly.eu-west-1.amazonaws.com/v1/voices?Engine=neural&IncludeAdditionalLanguageCodes=no&LanguageCode=en-US',
+        data: '' 
+    } 
+    let access_info = {
+        access_key: xxxxx, 
+        secret_key: xxxxxx,
+        session_token: xxxxx
+    }
+    let service_info = {
+        service: 'polly',
+        region: 'eu-west-1'
+    }
+
+
+    //use amplify sign()function to create the signed headers;
+    let signedRequest =  Signer.sign(request,access_info,service_info)
+
+    //remove host from header
+    delete signedRequest.headers['host']
+
+    //I normally create an instance if I need to intercept my response or request
+    var instance = axios.create();
+
+
+    let response = await instance(signedRequest).then(function (response) {    
+       console.log(response);
+       return response
+
+     }).catch(function (error) {
+
+         //... handle errors
+
+     });
 
     // const client = axios.create();
 
