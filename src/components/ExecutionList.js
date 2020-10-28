@@ -4,6 +4,88 @@ import { Layout } from "./Layout";
 import Button from "@material-ui/core/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useHistory } from "react-router";
+import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from "react-table";
+
+// Define a default UI for filtering
+function DefaultColumnFilter({
+  column: { filterValue, preFilteredRows, setFilter },
+}) {
+  const count = preFilteredRows.length
+
+  return (
+    <input
+      value={filterValue || ''}
+      onChange={e => {
+        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+      }}
+      placeholder={`Search ${count} records...`}
+    />
+  )
+}
+
+// This is a custom filter UI for selecting
+// a unique option from a list
+function SelectColumnFilter({
+  column: { filterValue, setFilter, preFilteredRows, id },
+}) {
+  // Calculate the options for filtering
+  // using the preFilteredRows
+  const options = React.useMemo(() => {
+    const options = new Set()
+    preFilteredRows.forEach(row => {
+      options.add(row.values[id])
+    })
+    return [...options.values()]
+  }, [id, preFilteredRows])
+
+  // Render a multi-select box
+  return (
+    <select
+      value={filterValue}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+    >
+      <option value="">All</option>
+      {options.map((option, i) => (
+        <option key={i} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+// Define a default UI for filtering
+function GlobalFilter({
+  preGlobalFilteredRows,
+  globalFilter,
+  setGlobalFilter,
+}) {
+  const count = preGlobalFilteredRows.length
+  const [value, setValue] = React.useState(globalFilter)
+  const onChange = useAsyncDebounce(value => {
+    setGlobalFilter(value || undefined)
+  }, 200)
+
+  return (
+    <span>
+      Global Search:{' '}
+      <input
+        value={value || ""}
+        onChange={e => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder={`${count} records...`}
+        style={{
+          fontSize: '1.1rem',
+          border: '0',
+        }}
+      />
+    </span>
+  )
+}
 
 export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
@@ -114,6 +196,45 @@ export default function ExecutionList() {
       },
     });
   };
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Title',
+        accessor: 'title',
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        Filter: SelectColumnFilter,
+        filter: 'includes',
+      },
+      {
+        Header: 'States',
+        accessor: 'state',
+      }
+    ],
+    []
+  )
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      // Let's set up our default Filter UI
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  )
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    state,
+    visibleColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter,
+    prepareRow,
+  } = useTable({ columns, data: executionList, defaultColumn }, useGlobalFilter, useFilters, useSortBy)
 
   return (
     <>
@@ -121,30 +242,70 @@ export default function ExecutionList() {
         {loading ? (
           <ClipLoader size={150} color={"#123abc"} loading={loading} />
         ) : (
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Status</th>
-                <th>States</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {executionList.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.title}</td>
-                  <td>{item.status}</td>
-                  <td>{item.state}</td>
-                  <td>
-                    <div className="btn-container">
-                      <Button variant="text" onClick={() => viewDetail(item)}>
-                        View
-                      </Button>
-                    </div>
-                  </td>
+          <table className="table table-striped" {...getTableProps()}>
+              <thead>
+                {headerGroups.map(headerGroup => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map(column => (
+                      <th {...column.getHeaderProps()}>
+                        {column.render('Header')}
+                        <span {...column.getSortByToggleProps()}>
+                          {column.isSorted
+                            ? column.isSortedDesc
+                              ? ' 🔽'
+                              : ' 🔼'
+                            : ' 🟦'}
+                        </span>
+                        <div>{column.canFilter ? column.render('Filter') : null}</div>
+                      </th>
+                    ))}
+                    <th>Action</th>
+                  </tr>
+                ))}
+                <tr>
+                  <th
+                    colSpan={visibleColumns.length}
+                    style={{
+                      textAlign: 'left',
+                    }}
+                  >
+                    <GlobalFilter
+                      preGlobalFilteredRows={preGlobalFilteredRows}
+                      globalFilter={state.globalFilter}
+                      setGlobalFilter={setGlobalFilter}
+                    />
+                  </th>
                 </tr>
-              ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {// Loop over the table rows
+                  rows.map(row => {
+                    console.log(row);
+                    // Prepare the row for display
+                    prepareRow(row)
+                    return (
+                      // Apply the row props
+                      <tr {...row.getRowProps()}>
+                        {// Loop over the rows cells
+                          row.cells.map(cell => {
+                            // Apply the cell props
+                            return (
+                              <td {...cell.getCellProps()}>
+                                {// Render the cell contents
+                                  cell.render('Cell')}
+                              </td>
+                            )
+                          })}
+                        <td>
+                          <div className="btn-container">
+                            <Button variant="text" onClick={() => viewDetail(row.values)}>
+                              View
+                              </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
             </tbody>
           </table>
         )}
