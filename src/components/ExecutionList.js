@@ -280,7 +280,6 @@ export default function ExecutionList() {
               <tbody {...getTableBodyProps()}>
                 {// Loop over the table rows
                   rows.map(row => {
-                    console.log(row);
                     // Prepare the row for display
                     prepareRow(row)
                     return (
