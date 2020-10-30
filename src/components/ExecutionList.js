@@ -184,6 +184,7 @@ export default function ExecutionList() {
     };
     (async () => {
       await fetchExecutions();
+      console.log("executionList: ",executionList);
       setloading(false);
     })();
   }, []);
