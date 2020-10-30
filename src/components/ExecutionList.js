@@ -176,11 +176,11 @@ export default function ExecutionList() {
       const executionArns = await getARNs();
       const details = await getDetails(executionArns);
       let executions = details.map((detail) => {
-        console.log("detail: ",detail);
         let title, status, state, amount;
         [title, status, state, amount] = detail;
-        return { title: title, status: status, state: state, amount: amount };
+        return { "title": title, "status": status, "state": state, "amount": amount };
       });
+      console.log("executions list: ",executions);
       setexecutionList(executions);
     };
     (async () => {
