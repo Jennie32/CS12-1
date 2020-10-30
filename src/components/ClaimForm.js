@@ -96,21 +96,23 @@ export default function ClaimForm() {
       path: `/alpha/start`,
       headers: {
         "content-type": "application/json",
+        "X-API-KEY": process.env.REACT_APP_APIKEYID
       },
     };
-
+    
     let signedRequest = aws4.sign(request, {
       // assumes user has authenticated and we have called
       // AWS.config.credentials.get to retrieve keys and
       // session tokens
-      secretAccessKey: process.env.REACT_APP_SECRETACCESSKEY,
-      accessKeyId: process.env.REACT_APP_ACCESSKEYID,
+      // secretAccessKey: process.env.REACT_APP_SECRETACCESSKEY,
+      // accessKeyId: process.env.REACT_APP_ACCESSKEYID,
     });
 
     delete signedRequest.headers["Host"];
     delete signedRequest.headers["Content-Length"];
 
     await axios(signedRequest);
+
     setVisible(true);
     setName("");
     setAmount("");
