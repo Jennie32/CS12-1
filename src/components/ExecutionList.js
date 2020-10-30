@@ -180,11 +180,11 @@ export default function ExecutionList() {
         [title, status, state, amount] = detail;
         return { title: title, status: status, state: state, amount: amount };
       });
+      console.log("executionList: ",executionList);
       setexecutionList(executions);
     };
     (async () => {
       await fetchExecutions();
-      console.log("executionList: ",executionList);
       setloading(false);
     })();
   }, []);
