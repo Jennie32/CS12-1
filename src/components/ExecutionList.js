@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Layout } from "./Layout";
 import Button from "@material-ui/core/Button";
@@ -91,6 +91,7 @@ export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
   const [loading, setloading] = useState(true);
   const history = useHistory();
+  const mountedRef = useRef(true)
 
   async function getTitle(item) {
     let title = "not found";
@@ -120,8 +121,57 @@ export default function ExecutionList() {
         return event.stateEnteredEventDetails.name;
       }
     }
-    return "not found";
+    return "empty";
   }
+
+  const viewDetail = (params) => {
+    history.push({
+      pathname: "/execution-detail/",
+      state: {
+        ...params,
+      },
+    });
+  };
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Title',
+        accessor: 'title',
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        Filter: SelectColumnFilter,
+        filter: 'includes',
+      },
+      {
+        Header: 'States',
+        accessor: 'state',
+      }
+    ],
+    []
+  )
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      // Let's set up our default Filter UI
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  )
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    state,
+    visibleColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter,
+    prepareRow,
+  } = useTable({ columns, data: executionList, defaultColumn }, useGlobalFilter, useFilters, useSortBy)
+
 
   useEffect(() => {
     const headers = {
@@ -180,53 +230,18 @@ export default function ExecutionList() {
         [title, status, state, amount] = detail;
         return { "title": title, "status": status, "state": state, "amount": amount };
       });
-      console.log("executions list: ",executions);
       setexecutionList(executions);
     };
     (async () => {
+      if (!mountedRef.current) return null
       await fetchExecutions();
       setloading(false);
     })();
-  }, []);
 
-  const viewDetail = (params) => {
-    history.push({
-      pathname: "/execution-detail/",
-      state: {
-        ...params,
-      },
-    });
-  };
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Title',
-        accessor: 'title',
-      },
-      {
-        Header: 'Status',
-        accessor: 'status',
-        Filter: SelectColumnFilter,
-        filter: 'includes',
-      },
-      {
-        Header: 'States',
-        accessor: 'state',
-      }
-    ],
-    []
-  )
-
-  const defaultColumn = React.useMemo(
-    () => ({
-      // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter,
-    }),
-    []
-  )
-
-  const {
-    getTableProps,
+    return () => { 
+      mountedRef.current = false
+    }
+  }, [getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
@@ -234,8 +249,7 @@ export default function ExecutionList() {
     visibleColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
-    prepareRow,
-  } = useTable({ columns, data: executionList, defaultColumn }, useGlobalFilter, useFilters, useSortBy)
+    prepareRow]);
 
   return (
     <>
