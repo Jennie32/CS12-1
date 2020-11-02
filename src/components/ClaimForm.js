@@ -100,13 +100,7 @@ export default function ClaimForm() {
       },
     };
     
-    let signedRequest = aws4.sign(request, {
-      // assumes user has authenticated and we have called
-      // AWS.config.credentials.get to retrieve keys and
-      // session tokens
-      // secretAccessKey: process.env.REACT_APP_SECRETACCESSKEY,
-      // accessKeyId: process.env.REACT_APP_ACCESSKEYID,
-    });
+    let signedRequest = aws4.sign(request);
 
     delete signedRequest.headers["Host"];
     delete signedRequest.headers["Content-Length"];
