@@ -51,8 +51,6 @@ function SelectColumnFilter({
     return [...options.values()]
   }, [id, preFilteredRows])
 
-  console.log(filterValue);
-
   // Render a multi-select box
   return (
     <FormControl style={{minWidth: 120, marginTop: '16px'}}>
@@ -274,7 +272,7 @@ export default function ExecutionList() {
     <>
       <Layout>
         <div className="create-btn-wrapper">
-          <Link to="/workflows/payment-claim/new">
+          <Link to="/workflows/new-payment-claim">
             <Button className="align-left" variant="contained" color="primary">Start a new payment claim</Button>
           </Link>
         </div>
