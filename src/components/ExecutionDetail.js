@@ -12,13 +12,10 @@ import CardContent from '@material-ui/core/CardContent';
 const useStyles = makeStyles({
   card: {
     display: 'flex',
-    
   },
   cardDetails: {
     flex: 1,
-    
   },
-  
 });
 
 const ExecutionDetail = () => {
@@ -55,13 +52,16 @@ const ExecutionDetail = () => {
   
 
   return (    
-    <Layout> 
+    <Layout>
+      <div className="text-left">
+        <h2>Payment Claim</h2>
+        <h3>ID: 6732167</h3>
+      </div>
       <div className={classes.card}>
         <Card className={classes.cardDetails}>
-          
-            <CardContent>
+          <CardContent>
             <Typography component="h2" variant="h5">
-            Workflow Diagram 
+              Workflow Diagram 
             </Typography>              
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 0 800 1200">
           <g id="Page-1" fill="none" fillRule="evenodd">
@@ -661,22 +661,21 @@ const ExecutionDetail = () => {
             </g>
           </g>
         </svg>           
-            </CardContent>
+          </CardContent>
         </Card>
         <Card className={classes.card}>   
-            <CardContent>               
-              <Typography component="h2" variant="h5">                
-                  {Object.keys(statesDict).map((key, index) => 
-                      <List key={`item-${index}`} component="nav" aria-label="contacts">
-                        <ListItem key={`item-${index}`}>
-                          <ListItemText primary={`${key.toUpperCase()}: ${statesDict[key]}`} />
-                        </ListItem>
-                      </List>
-                    
-                  )}                    
-              </Typography>       
-            </CardContent>
+          <CardContent>               
+            <Typography component="h2" variant="h5">                
+                {Object.keys(statesDict).map((key, index) => 
+                    <List key={`item-${index}`} component="nav" aria-label="contacts">
+                      <ListItem key={`item-${index}`}>
+                        <ListItemText primary={`${key.toUpperCase()}: ${statesDict[key]}`} />
+                      </ListItem>
+                    </List>
                   
+                )}                    
+            </Typography>       
+          </CardContent>
         </Card>
       </div>  
     </Layout>    
