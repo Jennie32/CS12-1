@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useHistory } from "react-router";
 import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from "react-table";
+import { Link } from "react-router-dom";
 
 // Define a default UI for filtering
 function DefaultColumnFilter({
@@ -125,8 +126,9 @@ export default function ExecutionList() {
   }
 
   const viewDetail = (params) => {
+    // use react-router Link component - will stop weird rendering issues
     history.push({
-      pathname: "/execution-detail/",
+      pathname: "/workflows/payment-claim/6732167",
       state: {
         ...params,
       },
@@ -254,6 +256,11 @@ export default function ExecutionList() {
   return (
     <>
       <Layout>
+        <div className="create-btn-wrapper">
+          <Link to="/workflows/payment-claim/new">
+            <Button className="align-left" variant="contained" color="primary">Start a new payment claim</Button>
+          </Link>
+        </div>
         {loading ? (
           <ClipLoader size={150} color={"#123abc"} loading={loading} />
         ) : (

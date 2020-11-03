@@ -24,11 +24,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const sections = [
-  { title: " Payment Claim", url: "/" },
-  { title: "Executions", url: "/execution-list" },
-  { title: "Execution Detail", url: "/execution-detail" },
-  { title: "Under construction", url: "#" },
-  { title: "Under construction", url: "#" },
+  // { title: " Payment Claim", url: "/" },
+  { title: "Workflows", url: "/" },
 ];
 
 export default function NavMenu() {
@@ -41,6 +38,15 @@ export default function NavMenu() {
         variant="dense"
         className={classes.toolbarSecondary}
       >
+        <NavLink
+          color="inherit"
+          key="123"
+          to="/"
+          className=""
+          style={{ textDecoration: "none" }}
+        >
+          <img src="https://res.cloudinary.com/dkx2eayab/image/upload/v1586504148/mastt/logos/mastt_logo_dark_oi2lul.png" width="180px" />
+        </NavLink>
         {sections.map((section, index) => (
           <NavLink
             color="inherit"

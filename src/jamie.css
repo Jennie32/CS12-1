@@ -1,0 +1,16 @@
+body {
+  padding-bottom: 80px;
+}
+
+.home-subheader {
+  margin-bottom: 30px;
+}
+
+.table-container {
+  height: 1000px;
+}
+
+.create-btn-wrapper {
+  float: left;
+  margin-bottom: 60px;
+}
