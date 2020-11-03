@@ -12,7 +12,7 @@ function App() {
       <Router>
         <Route exact path="/" component={Home} />
         <Route exact path="/workflows/payment-claim" component={ExecutionList} />
-        <Route path="/workflows/payment-claim/new" component={ClaimForm} />
+        <Route path="/workflows/new-payment-claim" component={ClaimForm} />
         <Route path="/workflows/payment-claim/:id" component={ExecutionDetail} />
       </Router>
     </div>

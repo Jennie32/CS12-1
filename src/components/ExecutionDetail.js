@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Layout } from "./Layout";
-import { useHistory } from "react-router";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -21,7 +20,6 @@ const useStyles = makeStyles({
 const ExecutionDetail = () => {
   const [stateId, setstateId] = useState();
   const [statesDict, setstatesDict] = useState({});
-  const history = useHistory();
   const stateLookup = {
     "Contractor claim payment": 1,
     "Superintendent confirm": 2,
@@ -38,15 +36,10 @@ const ExecutionDetail = () => {
   };
 
   useEffect(() => {
-    if (history.location.state === null) {
-      history.push({
-        pathname: "/execution-list"
-      })
-    } else {
-      setstatesDict(history.location.state);
-      setstateId(stateLookup[statesDict.state]);
-    }
-  }, [history, stateLookup, statesDict.state]);
+      setstatesDict({state:"Contractor claim payment"});
+      setstateId(1);
+
+  }, []);
 
   const classes = useStyles();
   

@@ -3,7 +3,6 @@ import axios from "axios";
 import { Layout } from "./Layout";
 import Button from "@material-ui/core/Button";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useHistory } from "react-router";
 import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from "react-table";
 import { Link } from "react-router-dom";
 
@@ -91,7 +90,6 @@ function GlobalFilter({
 export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
   const [loading, setloading] = useState(true);
-  const history = useHistory();
   const mountedRef = useRef(true)
 
   async function getTitle(item) {
@@ -125,15 +123,15 @@ export default function ExecutionList() {
     return "empty";
   }
 
-  const viewDetail = (params) => {
-    // use react-router Link component - will stop weird rendering issues
-    history.push({
-      pathname: "/workflows/payment-claim/6732167",
-      state: {
-        ...params,
-      },
-    });
-  };
+  // const viewDetail = (params) => {
+  //   // use react-router Link component - will stop weird rendering issues
+  //   history.push({
+  //     pathname: "/workflows/payment-claim/6732167",
+  //     state: {
+  //       ...params,
+  //     },
+  //   });
+  // };
   const columns = React.useMemo(
     () => [
       {
@@ -257,7 +255,7 @@ export default function ExecutionList() {
     <>
       <Layout>
         <div className="create-btn-wrapper">
-          <Link to="/workflows/payment-claim/new">
+          <Link to="/workflows/new-payment-claim">
             <Button className="align-left" variant="contained" color="primary">Start a new payment claim</Button>
           </Link>
         </div>
@@ -319,9 +317,9 @@ export default function ExecutionList() {
                           })}
                         <td>
                           <div className="btn-container">
-                            <Button variant="text" onClick={() => viewDetail(row.values)}>
-                              View
-                              </Button>
+                            <Link to="/workflows/payment-claim/6732167" >
+                              <Button className="align-left" variant="contained" color="primary">View</Button>
+                            </Link>
                           </div>
                         </td>
                       </tr>
