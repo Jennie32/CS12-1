@@ -3,8 +3,20 @@ import axios from "axios";
 import { Layout } from "./Layout";
 import Button from "@material-ui/core/Button";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useHistory } from "react-router";
 import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from "react-table";
 import { Link } from "react-router-dom";
+import TableContainer from '@material-ui/core/TableContainer';
+import Paper from '@material-ui/core/Paper';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Table from '@material-ui/core/Table';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 // Define a default UI for filtering
 function DefaultColumnFilter({
@@ -13,11 +25,12 @@ function DefaultColumnFilter({
   const count = preFilteredRows.length
 
   return (
-    <input
-      value={filterValue || ''}
+    <TextField 
+      value={filterValue || ''} 
       onChange={e => {
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
-      }}
+      }} 
+      label="Filter"
       placeholder={`Search ${count} records...`}
     />
   )
@@ -38,21 +51,26 @@ function SelectColumnFilter({
     return [...options.values()]
   }, [id, preFilteredRows])
 
+  console.log(filterValue);
+
   // Render a multi-select box
   return (
-    <select
-      value={filterValue}
-      onChange={e => {
-        setFilter(e.target.value || undefined)
-      }}
-    >
-      <option value="">All</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
+    <FormControl style={{minWidth: 120, marginTop: '16px'}}>
+      <Select
+        value={filterValue || ""}
+        onChange={e => {
+          setFilter(e.target.value || undefined)
+        }}
+        native
+      >
+        <option value="">All</option>
+        {options.map((option, i) => (
+          <option key={i} value={option}>
+            {option}
+          </option>
+        ))}
+      </Select>
+    </FormControl>
   )
 }
 
@@ -70,18 +88,18 @@ function GlobalFilter({
 
   return (
     <span>
-      Global Search:{' '}
-      <input
-        value={value || ""}
+      <TextField
+        value={value || ''} 
         onChange={e => {
           setValue(e.target.value);
           onChange(e.target.value);
         }}
-        placeholder={`${count} records...`}
+        fullWidth
         style={{
-          fontSize: '1.1rem',
-          border: '0',
+          fontSize: '1.1rem'
         }}
+        label="Global Search"
+        placeholder={`Search ${count} records...`}
       />
     </span>
   )
@@ -90,6 +108,7 @@ function GlobalFilter({
 export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
   const [loading, setloading] = useState(true);
+  const history = useHistory();
   const mountedRef = useRef(true)
 
   async function getTitle(item) {
@@ -123,15 +142,15 @@ export default function ExecutionList() {
     return "empty";
   }
 
-  // const viewDetail = (params) => {
-  //   // use react-router Link component - will stop weird rendering issues
-  //   history.push({
-  //     pathname: "/workflows/payment-claim/6732167",
-  //     state: {
-  //       ...params,
-  //     },
-  //   });
-  // };
+  const viewDetail = (params) => {
+    // use react-router Link component - will stop weird rendering issues
+    history.push({
+      pathname: "/workflows/payment-claim/6732167",
+      state: {
+        ...params,
+      },
+    });
+  };
   const columns = React.useMemo(
     () => [
       {
@@ -255,78 +274,91 @@ export default function ExecutionList() {
     <>
       <Layout>
         <div className="create-btn-wrapper">
-          <Link to="/workflows/new-payment-claim">
+          <Link to="/workflows/payment-claim/new">
             <Button className="align-left" variant="contained" color="primary">Start a new payment claim</Button>
           </Link>
         </div>
         {loading ? (
           <ClipLoader size={150} color={"#123abc"} loading={loading} />
         ) : (
-          <table className="table table-striped" {...getTableProps()}>
-              <thead>
-                {headerGroups.map(headerGroup => (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map(column => (
-                      <th {...column.getHeaderProps()}>
-                        {column.render('Header')}
-                        <span {...column.getSortByToggleProps()}>
-                          {column.isSorted
-                            ? column.isSortedDesc
-                              ? ' 🔽'
-                              : ' 🔼'
-                            : ' 🟦'}
-                        </span>
-                        <div>{column.canFilter ? column.render('Filter') : null}</div>
-                      </th>
-                    ))}
-                    <th>Action</th>
-                  </tr>
-                ))}
-                <tr>
-                  <th
-                    colSpan={visibleColumns.length}
-                    style={{
-                      textAlign: 'left',
-                    }}
-                  >
-                    <GlobalFilter
-                      preGlobalFilteredRows={preGlobalFilteredRows}
-                      globalFilter={state.globalFilter}
-                      setGlobalFilter={setGlobalFilter}
-                    />
-                  </th>
-                </tr>
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {
-                  rows.map(row => {
-                   
-                    prepareRow(row)
-                    return (
-                     
-                      <tr {...row.getRowProps()}>
-                        {
-                          row.cells.map(cell => {
-                           
-                            return (
-                              <td {...cell.getCellProps()}>
-                                {
-                                  cell.render('Cell')}
-                              </td>
-                            )
-                          })}
-                        <td>
-                          <div className="btn-container">
-                            <Link to="/workflows/payment-claim/6732167" >
-                              <Button className="align-left" variant="contained" color="primary">View</Button>
-                            </Link>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-            </tbody>
-          </table>
+          <TableContainer component={Paper}>
+            <Table {...getTableProps()}>
+                <TableHead>
+                  {headerGroups.map(headerGroup => (
+                    <TableRow {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map(column => (
+                        <TableCell {...column.getHeaderProps()}>
+                          <TableSortLabel
+                            active={column.isSorted}
+                            direction={column.isSorted ? (column.isSortedDesc ? "desc" : "asc") : "desc"}
+                            onClick={() => {
+                              const isDesc = column.isSorted && column.isSortedDesc;
+                              column.toggleSortBy(!isDesc, false);
+                            }}
+                          >
+                            {column.render('Header')}
+                          </TableSortLabel>
+                          {/* <span {...column.getSortByToggleProps()}>
+                              <IconButton size="small" style={{fontSize: '24px', color: column.isSorted ? "#3f51b5" : "rgba(0,0,0,0.2)"}}>
+                                {column.isSorted
+                                ? column.isSortedDesc
+                                  ? <ArrowDropDownIcon fontSize="inherit" />
+                                  : <ArrowDropUpIcon fontSize="inherit" />
+                                : <ArrowDropDownIcon fontSize="inherit" />}
+                              </IconButton>
+                          </span> */}
+                          <div>{column.canFilter ? column.render('Filter') : null}</div>
+                        </TableCell>
+                      ))}
+                      <TableCell>Action</TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow>
+                    <TableCell
+                      colSpan={visibleColumns.length + 1}
+                      style={{
+                        textAlign: 'left',
+                      }}
+                    >
+                      <GlobalFilter
+                        preGlobalFilteredRows={preGlobalFilteredRows}
+                        globalFilter={state.globalFilter}
+                        setGlobalFilter={setGlobalFilter}
+                      />
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody {...getTableBodyProps()}>
+                  {
+                    rows.map(row => {
+                    
+                      prepareRow(row)
+                      return (
+                      
+                        <TableRow {...row.getRowProps()}>
+                          {
+                            row.cells.map(cell => {
+                            
+                              return (
+                                <TableCell {...cell.getCellProps()}>
+                                  {
+                                    cell.render('Cell')}
+                                </TableCell>
+                              )
+                            })}
+                          <TableCell>
+                            <div className="btn-container">
+                              <Button variant="text" onClick={() => viewDetail(row.values)}>
+                                View
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
       </Layout>
     </>
