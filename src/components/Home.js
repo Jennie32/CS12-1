@@ -19,9 +19,9 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <h1 class="text-left">Workflow System</h1>
-        <h2 class="text-left home-subheader">Contract: AS4000</h2>
-        <h3 class="text-left">Workflow Register</h3>
+        <h1 className="text-left">Workflow System</h1>
+        <h2 className="text-left home-subheader">Contract: AS4000</h2>
+        <h3 className="text-left">Workflow Register</h3>
 
         <TableContainer component={Paper}>
           <Table aria-label="simple table">

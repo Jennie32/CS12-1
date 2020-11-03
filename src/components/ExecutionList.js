@@ -298,15 +298,6 @@ export default function ExecutionList() {
                           >
                             {column.render('Header')}
                           </TableSortLabel>
-                          {/* <span {...column.getSortByToggleProps()}>
-                              <IconButton size="small" style={{fontSize: '24px', color: column.isSorted ? "#3f51b5" : "rgba(0,0,0,0.2)"}}>
-                                {column.isSorted
-                                ? column.isSortedDesc
-                                  ? <ArrowDropDownIcon fontSize="inherit" />
-                                  : <ArrowDropUpIcon fontSize="inherit" />
-                                : <ArrowDropDownIcon fontSize="inherit" />}
-                              </IconButton>
-                          </span> */}
                           <div>{column.canFilter ? column.render('Filter') : null}</div>
                         </TableCell>
                       ))}
@@ -348,9 +339,9 @@ export default function ExecutionList() {
                             })}
                           <TableCell>
                             <div className="btn-container">
-                              <Button variant="text" onClick={() => viewDetail(row.values)}>
-                                View
-                              </Button>
+                              <Link to={{ pathname: '/workflows/payment-claim/6732167', data:  row.original }} >
+                                <Button className="align-left" variant="contained" color="primary">View</Button>
+                              </Link>
                             </div>
                           </TableCell>
                         </TableRow>

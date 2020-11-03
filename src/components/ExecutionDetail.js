@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ExecutionDetail = () => {
+const ExecutionDetail = (props) => {
   const [stateId, setstateId] = useState();
   const [statesDict, setstatesDict] = useState({});
   const stateLookup = {
@@ -36,9 +36,8 @@ const ExecutionDetail = () => {
   };
 
   useEffect(() => {
-      setstatesDict({state:"Contractor claim payment"});
-      setstateId(1);
-
+      setstatesDict(props.location.data);
+      setstateId(stateLookup[props.location.data.state]);
   }, []);
 
   const classes = useStyles();
