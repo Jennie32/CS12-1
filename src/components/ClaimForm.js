@@ -96,7 +96,7 @@ export default function ClaimForm() {
       path: `/alpha/start`,
       headers: {
         "content-type": "application/json",
-        "X-API-KEY": process.env.REACT_APP_APIKEYID
+        "X-API-KEY": "knFuuS5hIJ9qhaisyr9yR5mF91TYAA8M9VNlhiNB"
       },
     };
     
