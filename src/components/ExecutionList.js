@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import {Context} from '../store/Store'
 import axios from "axios";
 import { Layout } from "./Layout";
 import Button from "@material-ui/core/Button";
@@ -105,6 +106,7 @@ function GlobalFilter({
 export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
   const [loading, setloading] = useState(true);
+  const [state, dispatch] = useContext(Context);
 
   async function getTitle(item) {
     let title = "not found";
@@ -169,7 +171,7 @@ export default function ExecutionList() {
     getTableBodyProps,
     headerGroups,
     rows,
-    state,
+    tableState = state,
     visibleColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
@@ -235,10 +237,17 @@ export default function ExecutionList() {
     });
     setexecutionList(executions);
     setloading(false);
+    dispatch({type: 'SET_EXECUTIONS', payload: executions});
+    dispatch({type: 'SET_HASLOADED', payload: true});
   };
 
   useEffect(() => {
-    fetchExecutions(setexecutionList, setloading);
+    if (state.hasloaded !== undefined) {
+      setexecutionList(state.executions);
+      setloading(false);
+    } else {
+      fetchExecutions(setexecutionList, setloading);
+    }
   }, []);
 
   return (
@@ -284,7 +293,7 @@ export default function ExecutionList() {
                     >
                       <GlobalFilter
                         preGlobalFilteredRows={preGlobalFilteredRows}
-                        globalFilter={state.globalFilter}
+                        globalFilter={tableState.globalFilter}
                         setGlobalFilter={setGlobalFilter}
                       />
                     </TableCell>
