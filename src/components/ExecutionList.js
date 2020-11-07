@@ -250,6 +250,11 @@ export default function ExecutionList() {
     }
   }, []);
 
+  function refresh() {
+    setloading(true);
+    fetchExecutions(setexecutionList, setloading);
+  }
+
   return (
     <>
       <Layout>
@@ -258,6 +263,12 @@ export default function ExecutionList() {
             <Button className="align-left" variant="contained" color="primary">Start a new payment claim</Button>
           </Link>
         </div>
+        <div className="refresh-btn-wrapper">
+          <Button className="align-left" variant="contained" color="primary" onClick={refresh}>
+            Refresh
+          </Button>        
+        </div>
+        <br/>
         {loading ? (
           <ClipLoader size={150} color={"#123abc"} loading={loading} />
         ) : (

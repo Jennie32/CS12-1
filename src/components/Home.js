@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout } from "./Layout";
-import "../jamie.css";
+import "../css/custom.css";
 import workflowData from './workflowData';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
