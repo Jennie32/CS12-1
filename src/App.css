@@ -20,6 +20,10 @@
   fill: lightgrey;
 }
 
+body {
+  overflow-y: overlay;
+}
+
 rect {
   fill: lightblue;
 }
