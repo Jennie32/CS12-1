@@ -3,7 +3,6 @@ import axios from "axios";
 import { Layout } from "./Layout";
 import Button from "@material-ui/core/Button";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useHistory } from "react-router";
 import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from "react-table";
 import { Link } from "react-router-dom";
 import TableContainer from '@material-ui/core/TableContainer';
@@ -106,8 +105,6 @@ function GlobalFilter({
 export default function ExecutionList() {
   const [executionList, setexecutionList] = useState([]);
   const [loading, setloading] = useState(true);
-  const history = useHistory();
-  const mountedRef = useRef(true)
 
   async function getTitle(item) {
     let title = "not found";
@@ -140,15 +137,6 @@ export default function ExecutionList() {
     return "empty";
   }
 
-  const viewDetail = (params) => {
-    // use react-router Link component - will stop weird rendering issues
-    history.push({
-      pathname: "/workflows/payment-claim/6732167",
-      state: {
-        ...params,
-      },
-    });
-  };
   const columns = React.useMemo(
     () => [
       {
@@ -171,7 +159,6 @@ export default function ExecutionList() {
 
   const defaultColumn = React.useMemo(
     () => ({
-      // Let's set up our default Filter UI
       Filter: DefaultColumnFilter,
     }),
     []
@@ -190,83 +177,69 @@ export default function ExecutionList() {
   } = useTable({ columns, data: executionList, defaultColumn }, useGlobalFilter, useFilters, useSortBy)
 
 
+  const headers = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  };
+  async function getDetails(executionArns) {
+    const asyncDescriptions = await Promise.all(
+      executionArns.map(async (arn) => {
+        const tempDescription = await axios.post(
+          "https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/describeexecution",
+          {
+            executionArn: arn.toString(),
+          },
+          headers
+        );
+
+        const executionHistories = await axios.post(
+          "https://prf7e0psi7.execute-api.eu-central-1.amazonaws.com/beta/execution",
+          {
+            executionArn: arn.toString(),
+            includeExecutionData: true,
+            maxResults: 10,
+            reverseOrder: true,
+          },
+          headers
+        );
+          
+        const stateName = await getStateName(executionHistories.data.events);
+        const parsedDataInput = JSON.parse(tempDescription.data.input);
+        const amount = await getAmount(parsedDataInput);
+        return [await getTitle(parsedDataInput), tempDescription.data.status, stateName, amount];
+      })
+    );
+    return asyncDescriptions;
+  }
+
+  async function getARNs() {
+    let result = await axios.post(
+      "https://oys6sr3oo2.execute-api.eu-central-1.amazonaws.com/dev/execution",
+      {
+        maxResults: 20,
+        stateMachineArn: "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
+      },
+      headers
+    );
+    var Arnresults = result.data.executions.map((execution) => execution.executionArn);
+    return Arnresults;
+  }
+
+  const fetchExecutions = async (setexecutionList, setloading) => {
+    const executionArns = await getARNs();
+    const details = await getDetails(executionArns);
+    let executions = details.map((detail) => {
+      let title, status, state, amount;
+      [title, status, state, amount] = detail;
+      return { "title": title, "status": status, "state": state, "amount": amount };
+    });
+    setexecutionList(executions);
+    setloading(false);
+  };
+
   useEffect(() => {
-    const headers = {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    };
-    async function getDetails(executionArns) {
-      const asyncDescriptions = await Promise.all(
-        executionArns.map(async (arn) => {
-          const tempDescription = await axios.post(
-            "https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/describeexecution",
-            {
-              executionArn: arn.toString(),
-            },
-            headers
-          );
-
-          const executionHistories = await axios.post(
-            "https://prf7e0psi7.execute-api.eu-central-1.amazonaws.com/beta/execution",
-            {
-              executionArn: arn.toString(),
-              includeExecutionData: true,
-              maxResults: 10,
-              reverseOrder: true,
-            },
-            headers
-          );
-            
-          const stateName = await getStateName(executionHistories.data.events);
-          const parsedDataInput = JSON.parse(tempDescription.data.input);
-          const amount = await getAmount(parsedDataInput);
-          return [await getTitle(parsedDataInput), tempDescription.data.status, stateName, amount];
-        })
-      );
-      return asyncDescriptions;
-    }
-
-    async function getARNs() {
-      let result = await axios.post(
-        "https://oys6sr3oo2.execute-api.eu-central-1.amazonaws.com/dev/execution",
-        {
-          maxResults: 20,
-          stateMachineArn: "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
-        },
-        headers
-      );
-      var Arnresults = result.data.executions.map((execution) => execution.executionArn);
-      return Arnresults;
-    }
-
-    const fetchExecutions = async () => {
-      const executionArns = await getARNs();
-      const details = await getDetails(executionArns);
-      let executions = details.map((detail) => {
-        let title, status, state, amount;
-        [title, status, state, amount] = detail;
-        return { "title": title, "status": status, "state": state, "amount": amount };
-      });
-      setexecutionList(executions);
-    };
-    (async () => {
-      if (!mountedRef.current) return null
-      await fetchExecutions();
-      setloading(false);
-    })();
-
-    return () => { 
-      mountedRef.current = false
-    }
-  }, [getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    state,
-    visibleColumns,
-    preGlobalFilteredRows,
-    setGlobalFilter,
-    prepareRow]);
+    fetchExecutions(setexecutionList, setloading);
+  }, []);
 
   return (
     <>
