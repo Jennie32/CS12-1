@@ -20,25 +20,25 @@ const useStyles = makeStyles({
 const ExecutionDetail = (props) => {
   const [stateId, setstateId] = useState();
   const [statesDict, setstatesDict] = useState({});
-  const stateLookup = {
-    "Contractor claim payment": 1,
-    "Superintendent confirm": 2,
-    "Superintrndentconfirmed": 3,
-    "Reject and no action taken": 4,
-    "Get Payment Certificate": 5,
-    "Payment Claim and Certificate Issued to Principal": 6,
-    "Save Payment Certificate state in DB": 7,
-    "Payment choice": 8,
-    "PaymentWithheld": 9,
-    "Executespayment": 10,
-    "Go to Direct Payment Workflow": 11,
-    "Place for Payment Place of Business": 12
-  };
 
   useEffect(() => {
+      const stateLookup = {
+        "Contractor claim payment": 1,
+        "Superintendent confirm": 2,
+        "Superintrndentconfirmed": 3,
+        "Reject and no action taken": 4,
+        "Get Payment Certificate": 5,
+        "Payment Claim and Certificate Issued to Principal": 6,
+        "Save Payment Certificate state in DB": 7,
+        "Payment choice": 8,
+        "PaymentWithheld": 9,
+        "Executespayment": 10,
+        "Go to Direct Payment Workflow": 11,
+        "Place for Payment Place of Business": 12
+      };
       setstatesDict(props.location.data);
       setstateId(stateLookup[props.location.data.state]);
-  }, []);
+  }, [props.location.data]);
 
   const classes = useStyles();
   
