@@ -105,7 +105,6 @@ function GlobalFilter({
 }
 
 export default function ExecutionList() {
-  const [loadmore, setloadMore] = useState(false);
   const [loading, setloading] = useState(true);
   const [state, dispatch] = useContext(Context);
 
@@ -259,11 +258,10 @@ export default function ExecutionList() {
       }
       dispatch({type: 'SET_HASLOADED', payload: true});
       setloading(false);
-      setloadMore(false);
     };
 
-    function loadMore() {
-      setloadMore(true);
+    function loading() {
+      setloading(true);
       if (state.nexttoken !== undefined) {
         fetchExecutions();
       }
@@ -272,7 +270,7 @@ export default function ExecutionList() {
     function handleScroll() { 
       const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop; 
       const scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight; 
-      if (scrollTop + window.innerHeight + 50 >= scrollHeight){ loadMore(); } 
+      if (scrollTop + window.innerHeight + 50 >= scrollHeight){ loading(); } 
     }
   
     if (state.hasloaded !== undefined) {
@@ -282,7 +280,7 @@ export default function ExecutionList() {
     }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [state.executions, state.hasloaded, state.nexttoken, dispatch, loadmore]);
+  }, [state.executions, state.hasloaded, state.nexttoken, dispatch, loading]);
 
   function refresh() {
     console.log("refresh click");
@@ -302,9 +300,6 @@ export default function ExecutionList() {
           </Button>        
         </div>
         <br/>
-        {loading ? (
-          <ClipLoader size={150} color={"#123abc"} loading={loading} />
-        ) : (
           <TableContainer component={Paper}>
             <Table {...getTableProps()}>
                 <TableHead>
@@ -374,9 +369,8 @@ export default function ExecutionList() {
               </TableBody>
             </Table>
           </TableContainer>
-        )}
         <br/>
-      {loadmore && <BeatLoader color={"#123abc"} loading={loadmore} />}
+      {loading && <BeatLoader color={"#123abc"} loading={loading} />}
       </Layout>
     </>
   );
