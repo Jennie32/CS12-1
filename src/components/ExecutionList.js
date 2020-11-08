@@ -4,6 +4,7 @@ import axios from "axios";
 import { Layout } from "./Layout";
 import Button from "@material-ui/core/Button";
 import ClipLoader from "react-spinners/ClipLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, useFilters } from "react-table";
 import { Link } from "react-router-dom";
 import TableContainer from '@material-ui/core/TableContainer';
@@ -104,7 +105,7 @@ function GlobalFilter({
 }
 
 export default function ExecutionList() {
-  const [executionList, setexecutionList] = useState([]);
+  const [loadmore, setloadMore] = useState(false);
   const [loading, setloading] = useState(true);
   const [state, dispatch] = useContext(Context);
 
@@ -176,83 +177,115 @@ export default function ExecutionList() {
     preGlobalFilteredRows,
     setGlobalFilter,
     prepareRow,
-  } = useTable({ columns, data: executionList, defaultColumn }, useGlobalFilter, useFilters, useSortBy)
-
-
-  const headers = {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-  };
-  async function getDetails(executionArns) {
-    const asyncDescriptions = await Promise.all(
-      executionArns.map(async (arn) => {
-        const tempDescription = await axios.post(
-          "https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/describeexecution",
-          {
-            executionArn: arn.toString(),
-          },
-          headers
-        );
-
-        const executionHistories = await axios.post(
-          "https://prf7e0psi7.execute-api.eu-central-1.amazonaws.com/beta/execution",
-          {
-            executionArn: arn.toString(),
-            includeExecutionData: true,
-            maxResults: 10,
-            reverseOrder: true,
-          },
-          headers
-        );
-          
-        const stateName = await getStateName(executionHistories.data.events);
-        const parsedDataInput = JSON.parse(tempDescription.data.input);
-        const amount = await getAmount(parsedDataInput);
-        return [await getTitle(parsedDataInput), tempDescription.data.status, stateName, amount];
-      })
-    );
-    return asyncDescriptions;
-  }
-
-  async function getARNs() {
-    let result = await axios.post(
-      "https://oys6sr3oo2.execute-api.eu-central-1.amazonaws.com/dev/execution",
-      {
-        maxResults: 20,
-        stateMachineArn: "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
-      },
-      headers
-    );
-    var Arnresults = result.data.executions.map((execution) => execution.executionArn);
-    return Arnresults;
-  }
-
-  const fetchExecutions = async (setexecutionList, setloading) => {
-    const executionArns = await getARNs();
-    const details = await getDetails(executionArns);
-    let executions = details.map((detail) => {
-      let title, status, state, amount;
-      [title, status, state, amount] = detail;
-      return { "title": title, "status": status, "state": state, "amount": amount };
-    });
-    setexecutionList(executions);
-    setloading(false);
-    dispatch({type: 'SET_EXECUTIONS', payload: executions});
-    dispatch({type: 'SET_HASLOADED', payload: true});
-  };
+  } = useTable({ columns, data: state.executions, defaultColumn }, useGlobalFilter, useFilters, useSortBy)
 
   useEffect(() => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    };
+    async function getDetails(executionArns) {
+      const asyncDescriptions = await Promise.all(
+        executionArns.map(async (arn) => {
+          const tempDescription = await axios.post(
+            "https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/describeexecution",
+            {
+              executionArn: arn.toString(),
+            },
+            headers
+          );
+  
+          const executionHistories = await axios.post(
+            "https://prf7e0psi7.execute-api.eu-central-1.amazonaws.com/beta/execution",
+            {
+              executionArn: arn.toString(),
+              includeExecutionData: true,
+              maxResults: 10,
+              reverseOrder: true,
+            },
+            headers
+          );
+            
+          const stateName = await getStateName(executionHistories.data.events);
+          const parsedDataInput = JSON.parse(tempDescription.data.input);
+          const amount = await getAmount(parsedDataInput);
+          return [await getTitle(parsedDataInput), tempDescription.data.status, stateName, amount];
+        })
+      );
+      return asyncDescriptions;
+    }
+  
+    async function getARNs() {
+      let result;
+      if (state.nexttoken === undefined) {
+        result = await axios.post(
+          "https://oys6sr3oo2.execute-api.eu-central-1.amazonaws.com/dev/execution",
+          {
+            
+            maxResults: 10,
+            stateMachineArn: "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
+          },
+          headers
+        );
+      } else {
+        result = await axios.post(
+          "https://oys6sr3oo2.execute-api.eu-central-1.amazonaws.com/dev/execution",
+          {
+            maxResults: 10,
+            stateMachineArn: "arn:aws:states:eu-central-1:638900115631:stateMachine:BasicWorkflow",
+            nextToken: state.nexttoken
+          },
+          headers
+        );
+      }
+  
+      dispatch({type: 'SET_NEXTTOKEN', payload: result.data.nextToken});
+      var Arnresults = result.data.executions.map((execution) => execution.executionArn);
+      return Arnresults;
+    }
+  
+    const fetchExecutions = async () => {
+      const executionArns = await getARNs();
+      const details = await getDetails(executionArns);
+      let executions = details.map((detail) => {
+        let title, status, state, amount;
+        [title, status, state, amount] = detail;
+        return { "title": title, "status": status, "state": state, "amount": amount };
+      });
+      if (state.nexttoken === undefined) {
+        dispatch({type: 'SET_EXECUTIONS', payload: executions});
+      } else {
+        dispatch({type: 'ADD_EXECUTION', payload: executions});
+      }
+      dispatch({type: 'SET_HASLOADED', payload: true});
+      setloading(false);
+      setloadMore(false);
+    };
+
+    function loadMore() {
+      setloadMore(true);
+      if (state.nexttoken !== undefined) {
+        fetchExecutions();
+      }
+    }
+
+    function handleScroll() { 
+      const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop; 
+      const scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight; 
+      if (scrollTop + window.innerHeight + 50 >= scrollHeight){ loadMore(); } 
+    }
+  
     if (state.hasloaded !== undefined) {
-      setexecutionList(state.executions);
       setloading(false);
     } else {
-      fetchExecutions(setexecutionList, setloading);
+      fetchExecutions();
     }
-  }, []);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [state.executions, state.hasloaded, state.nexttoken, dispatch, loadmore]);
 
   function refresh() {
-    setloading(true);
-    fetchExecutions(setexecutionList, setloading);
+    console.log("refresh click");
   }
 
   return (
@@ -342,6 +375,8 @@ export default function ExecutionList() {
             </Table>
           </TableContainer>
         )}
+        <br/>
+      {loadmore && <BeatLoader color={"#123abc"} loading={loadmore} />}
       </Layout>
     </>
   );

@@ -20,6 +20,11 @@ const Reducer = (state, action) => {
                     ...state,
                     hasloaded: action.payload
                 };
+        case 'SET_NEXTTOKEN':
+            return {
+                ...state,
+                nexttoken: action.payload
+            };
         case 'SET_ERROR':
             return {
                 ...state,
