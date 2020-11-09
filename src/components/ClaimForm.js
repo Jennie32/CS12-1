@@ -88,15 +88,16 @@ export default function ClaimForm() {
     };
 
     let request = {
-      host: "k9nxrt45sj.execute-api.ap-southeast-2.amazonaws.com",
+
+      host: "wid4bo7v0k.execute-api.eu-central-1.amazonaws.com",
       method: "POST",
-      url: `https://k9nxrt45sj.execute-api.ap-southeast-2.amazonaws.com/states/start`,
+      url: `https://wid4bo7v0k.execute-api.eu-central-1.amazonaws.com/alpha/start`,
       data: data, // object describing the data
       body: JSON.stringify(data), // aws4 looks for body; axios for data
       path: `/states/start`,
       headers: {
         "content-type": "application/json",
-        "X-API-KEY": "H7AxJUryMk6XgLRqwKaIZ9gGkk38hiN84aqqImQP"
+        "X-API-KEY": "knFuuS5hIJ9qhaisyr9yR5mF91TYAA8M9VNlhiNB"
       },
     };
     
