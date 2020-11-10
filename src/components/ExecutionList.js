@@ -300,7 +300,7 @@ export default function ExecutionList() {
           </Button>        
         </div>
         <br/>
-          <TableContainer style={{minHeight: '100vh'}} component={Paper}>
+          <TableContainer component={Paper}>
             <Table style={{tableLayout: 'fixed'}} {...getTableProps()}>
                 <TableHead>
                   {headerGroups.map(headerGroup => (
